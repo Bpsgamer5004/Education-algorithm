@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator Forge — Neural Collaboration Matrix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="pitch-black" data-page="hub" data-mode="buyer">
+
+  <!-- Persistent Fullscreen Transparent Starfield -->
+  <canvas id="interactive-star-canvas"></canvas>
+
+  <!-- Toast Notification -->
+  <div id="toast-notify" class="toast-notify"></div>
+
+  <!-- Interactive Lightbox Modal with Glowing Bubble Frame -->
+  <div id="photo-lightbox-modal" class="lightbox-modal-overlay">
+    <div class="lightbox-bubble-container">
+      <div class="lightbox-halo-glow"></div>
+      <button id="close-lightbox-btn" class="lightbox-close-btn">&times;</button>
+      <div class="lightbox-content-box">
+        <img id="lightbox-img" src="" alt="Creator Work Fullscreen" />
+        <div class="lightbox-caption">
+          <h4 id="lightbox-title">Work Title</h4>
+          <span id="lightbox-author">@author</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-container">
+
+    <!-- Top Mode Switcher Bar -->
+    <header class="app-top-nav">
+      <div class="mode-switcher-capsule">
+        <span class="mode-label">PERSONA:</span>
+        <button class="mode-toggle-btn active" id="btn-mode-buyer" data-mode="buyer">
+          <i data-lucide="shopping-bag"></i> Creator / Explorer
+        </button>
+        <button class="mode-toggle-btn" id="btn-mode-recruiter" data-mode="recruiter">
+          <i data-lucide="briefcase"></i> Recruiter / Studio
+        </button>
+      </div>
+
+      <div class="active-mode-badge" id="mode-badge-indicator">
+        <span class="mode-pulse"></span>
+        <span id="mode-text-desc">CREATOR MODE (REVIEWS & PORTFOLIO ACCESS)</span>
+      </div>
+    </header>
+
+    <!-- 0. MAIN HUB VIEW -->
+    <main id="main-hub" class="view-panel active">
+      
+      <header class="hub-hero">
+        <div class="neo-glass-tag">
+          <span class="pulse-bead"></span>
+          <span>CREATOR FORGE &bull; NEURAL COLLABORATION MATRIX</span>
+        </div>
+        
+        <!-- Ripple Title -->
+        <h1 class="hero-brand-title" id="ripple-brand-title">
+          <span class="word-wrap"><span class="title-char">C</span><span class="title-char">r</span><span class="title-char">e</span><span class="title-char">a</span><span class="title-char">t</span><span class="title-char">o</span><span class="title-char">r</span></span>
+          <span class="word-spacer">&nbsp;</span>
+          <span class="word-wrap"><span class="title-char">F</span><span class="title-char">o</span><span class="title-char">r</span><span class="title-char">g</span><span class="title-char">e</span></span>
+        </h1>
+        
+        <p class="hero-brand-sub">Fewer switches. Better defaults. Drag the bead or aim at the core to explore.</p>
+      </header>
+
+      <!-- Center Orbital Stage -->
+      <div class="circular-meniscus-stage" id="circularMeniscusStage">
+        
+        <!-- 3D Rotating Crystal in the Center -->
+        <div class="crystal-stage-center">
+          <canvas id="crystal-canvas"></canvas>
+          <div class="crystal-backlight-aura"></div>
+        </div>
+
+        <!-- SVG Circular Meniscus Ring with Mouse-Facing Semicircle Notch -->
+        <svg class="circular-meniscus-svg" viewBox="0 0 460 460">
+          <defs>
+            <radialGradient id="ringGlassFill" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="transparent" />
+              <stop offset="85%" stop-color="rgba(24, 20, 36, 0.75)" />
+              <stop offset="100%" stop-color="rgba(12, 10, 18, 0.9)" />
+            </radialGradient>
+            <linearGradient id="ringBorderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255, 255, 255, 0.35)" />
+              <stop offset="35%" stop-color="rgba(168, 85, 247, 0.5)" />
+              <stop offset="70%" stop-color="rgba(16, 185, 129, 0.4)" />
+              <stop offset="100%" stop-color="rgba(255, 255, 255, 0.2)" />
+            </linearGradient>
+          </defs>
+
+          <!-- Outer & Inner Glass Guide Rings -->
+          <circle cx="230" cy="230" r="162" class="ring-guide-track" />
+          <circle cx="230" cy="230" r="132" class="ring-guide-inner" />
+
+          <!-- Dynamic Semicircle Curve that Rotates in Real-Time to Face the Mouse -->
+          <path id="orbitalMeniscusPath" class="orbital-notch-path" d="" />
+        </svg>
+
+        <!-- Dynamic Circular Draggable Bead -->
+        <div class="orbital-draggable-bead" id="orbitalDraggableBead" title="Drag bead around the circular meniscus ring">
+          <div class="bead-fluid-lens"></div>
+          <i data-lucide="home" id="orbitalActiveIcon"></i>
+        </div>
+
+        <!-- 8 Circular Buttons with Glassmorphic Icons -->
+        <div class="bead-radial-orbit" id="bead-radial-orbit">
+
+          <!-- 1. Top: Homepage (Chartreuse/Lime) -->
+          <a href="#homepage" class="bead-button bead-lime active-bead" data-target="homepage" data-dir="top" data-angle="270" data-color="#a3e635" data-icon="home" style="--angle: 270deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="home"></i></div>
+            <span class="bead-floating-label">Home</span>
+          </a>
+
+          <!-- 2. Top-Right: Favorites (Neon Rose) -->
+          <a href="#favorites" class="bead-button bead-rose" data-target="favorites" data-dir="top-right" data-angle="315" data-color="#f43f5e" data-icon="heart" style="--angle: 315deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="heart"></i></div>
+            <span class="bead-floating-label">Favorites</span>
+          </a>
+
+          <!-- 3. Right: Explore (Cyber Cyan) -->
+          <a href="#explore" class="bead-button bead-cyan" data-target="explore" data-dir="right" data-angle="0" data-color="#06b6d4" data-icon="compass" style="--angle: 0deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="compass"></i></div>
+            <span class="bead-floating-label">Explore</span>
+          </a>
+
+          <!-- 4. Bottom-Right: Credits (Amber Gold) -->
+          <a href="#credits" class="bead-button bead-amber" data-target="credits" data-dir="bottom-right" data-angle="45" data-color="#f59e0b" data-icon="award" style="--angle: 45deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="award"></i></div>
+            <span class="bead-floating-label">Credits</span>
+          </a>
+
+          <!-- 5. Bottom: Contacts (Emerald Mint) -->
+          <a href="#contacts" class="bead-button bead-emerald" data-target="contacts" data-dir="bottom" data-angle="90" data-color="#10b981" data-icon="mail" style="--angle: 90deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="mail"></i></div>
+            <span class="bead-floating-label">Contacts</span>
+          </a>
+
+          <!-- 6. Bottom-Left: Workspace (Vivid Violet) -->
+          <a href="#workspace" class="bead-button bead-violet" data-target="workspace" data-dir="bottom-left" data-angle="135" data-color="#8b5cf6" data-icon="layers" style="--angle: 135deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="layers"></i></div>
+            <span class="bead-floating-label">Workspace</span>
+          </a>
+
+          <!-- 7. Left: Profile (Tangerine Orange) -->
+          <a href="#profile" class="bead-button bead-orange" data-target="profile" data-dir="left" data-angle="180" data-color="#f97316" data-icon="user" style="--angle: 180deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="user"></i></div>
+            <span class="bead-floating-label">Profile</span>
+          </a>
+
+          <!-- 8. Top-Left: Invite (Sky Azure) -->
+          <a href="#invite" class="bead-button bead-sky" data-target="invite" data-dir="top-left" data-angle="225" data-color="#0ea5e9" data-icon="user-plus" style="--angle: 225deg;">
+            <div class="bead-core-circle glass-icon-box"><i data-lucide="user-plus"></i></div>
+            <span class="bead-floating-label">Invite</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Bottom Hint -->
+      <div class="circular-hint-tag">
+        <span>Circular rim tracks cursor &bull; Hover over Creator Forge for ripple &bull; Click any bead to redirect</span>
+      </div>
+
+    </main>
+
+    <!-- 1. HOMEPAGE: 24 CREATORS DIRECTORY (Anchor: #homepage -> Return: BOTTOM) -->
+    <section id="page-homepage" class="destination-panel" data-origin="top" data-theme="lime">
+      <div class="glass-brutal-shell wide-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-lime">CREATOR FORGE &bull; 24 VERIFIED AI CREATORS</div>
+          <div class="panel-meta">CLICK PHOTO TO OPEN GLOWING BUBBLE LIGHTBOX &bull; HEART TO PIN</div>
+        </div>
+        <h2 class="panel-heading">CREATOR DIRECTORY</h2>
+        <p class="panel-sub">Hover for signature workflow templates. Click avatar photos to zoom into the glowing bubble frame.</p>
+
+        <div class="creators-filter-row">
+          <input type="text" id="creator-search-input" class="glass-search" placeholder="Search creators, models, or specialties..." />
+          <div class="filter-pills">
+            <button class="filter-btn active" data-filter="all">All Specialties</button>
+            <button class="filter-btn" data-filter="diffusion">Diffusion & LoRA</button>
+            <button class="filter-btn" data-filter="agent">Autonomous Agents</button>
+            <button class="filter-btn" data-filter="audio">Audio & Voice</button>
+            <button class="filter-btn" data-filter="video">Video Gen</button>
+          </div>
+        </div>
+
+        <div class="creators-directory-grid" id="creators-grid"></div>
+      </div>
+
+      <!-- Return Button: BOTTOM -->
+      <div class="return-zone bottom">
+        <a href="#hub" class="neo-glass-return-btn bead-lime-return" data-return="top">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-down"></i></div>
+          <span>Return to Creator Forge Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 2. FAVORITES: LIKED CREATORS & FAVORITED POSTS (Anchor: #favorites -> Return: BOTTOM-LEFT) -->
+    <section id="page-favorites" class="destination-panel" data-origin="top-right" data-theme="rose">
+      <div class="glass-brutal-shell wide-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-rose">SAVED FAVORITES</div>
+          <div class="panel-meta" id="fav-count-meta">0 ITEMS PINNED</div>
+        </div>
+        <h2 class="panel-heading">FAVORITE CREATORS & POSTS</h2>
+        <p class="panel-sub">Creators and shared works you have favorited across the platform.</p>
+
+        <!-- Favorites subtabs: Creators vs Posts -->
+        <div class="fav-sub-tabs">
+          <button class="fav-tab-btn active" id="fav-tab-creators-btn">Favorited Creators</button>
+          <button class="fav-tab-btn" id="fav-tab-posts-btn">Favorited Posts & Assets</button>
+        </div>
+
+        <div class="favorites-grid" id="favorites-grid"></div>
+        <div class="favorites-grid" id="favorites-posts-grid" style="display: none;"></div>
+      </div>
+
+      <!-- Return Button: BOTTOM-LEFT -->
+      <div class="return-zone bottom-left">
+        <a href="#hub" class="neo-glass-return-btn bead-rose-return" data-return="top-right">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-down-left"></i></div>
+          <span>Return to Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 3. EXPLORE TAB: CREATOR SEES REVIEWS / RECRUITER SEES PROMPTS (Anchor: #explore -> Return: LEFT) -->
+    <section id="page-explore" class="destination-panel" data-origin="right" data-theme="cyan">
+      <div class="glass-brutal-shell wide-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-cyan">COMMUNITY HUB &bull; PROMPTS &bull; WORK FEED &bull; REVIEWS</div>
+          <div class="panel-meta" id="explore-role-hint">ROLE TARGETED EXPLORATION</div>
+        </div>
+        <h2 class="panel-heading">EXPLORE & COMMUNITY</h2>
+        <p class="panel-sub" id="explore-role-sub">Creators review studio feedback; Recruiters inspect prompt engineering channels.</p>
+
+        <!-- Sub Tabs in Explore (Dynamically highlighted based on persona mode) -->
+        <div class="explore-sub-nav">
+          <button class="exp-tab-btn" id="btn-exp-prompts" data-view="prompts">
+            <i data-lucide="message-square"></i> Prompt Engineering Room <span class="tab-target-badge" id="badge-prompts-target">Recruiter View</span>
+          </button>
+          <button class="exp-tab-btn" id="btn-exp-reviews" data-view="reviews">
+            <i data-lucide="award"></i> Creator Studio Reviews <span class="tab-target-badge" id="badge-reviews-target">Creator View</span>
+          </button>
+          <button class="exp-tab-btn" id="btn-exp-works" data-view="works">
+            <i data-lucide="share-2"></i> Shared Works Feed (Favorite & Send)
+          </button>
+        </div>
+
+        <!-- 3A. Creator Prompt Room (Creators / Recruiters sharing prompt combos) -->
+        <div class="explore-pane" id="pane-prompts-room" style="display: none;">
+          <div class="prompt-chat-split">
+            <div class="prompt-rooms-sidebar">
+              <div class="sidebar-label">ACTIVE PROMPT CHANNELS</div>
+              <div class="room-channel active"><i data-lucide="hash"></i> flux-photorealism</div>
+              <div class="room-channel"><i data-lucide="hash"></i> negative-token-purging</div>
+              <div class="room-channel"><i data-lucide="hash"></i> temporal-consistency</div>
+              <div class="room-channel"><i data-lucide="hash"></i> llm-agent-system-prompts</div>
+            </div>
+
+            <div class="prompt-discussion-box">
+              <div class="prompt-chat-header">
+                <div>
+                  <h4>#flux-photorealism</h4>
+                  <span>Discussion on optimal CFG scale, sampler weights, and lighting tokens</span>
+                </div>
+                <span class="active-badge">14 ACTIVE PARTICIPANTS</span>
+              </div>
+
+              <!-- Fake live creator prompt conversation -->
+              <div class="prompt-chat-stream" id="prompt-chat-stream"></div>
+
+              <form class="prompt-send-bar" id="prompt-send-form">
+                <input type="text" class="prompt-input" id="prompt-input" placeholder="Share a prompt combination or ask about token weights..." />
+                <button type="submit" class="action-glass-btn"><i data-lucide="send"></i> Post Prompt</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3B. Recruiter Studio Reviews Tab (Creators inspecting feedback) -->
+        <div class="explore-pane" id="pane-recruiter-reviews" style="display: none;">
+          <div class="recruiter-reviews-container">
+            <div class="reviews-intro-card">
+              <h3>Verified Studio Reviews & Peer Intel</h3>
+              <p>Confidential discussion channel where enterprise studios and recruiters review creator reliability, pipeline speed, and token efficiency.</p>
+            </div>
+
+            <div class="recruiter-conversations-stream" id="recruiter-reviews-stream"></div>
+          </div>
+        </div>
+
+        <!-- 3C. Shared Works Feed (With Favorite Heart Button & One-Click Send to Contacts) -->
+        <div class="explore-pane" id="pane-shared-works" style="display: none;">
+          <div class="shared-works-grid" id="shared-works-feed"></div>
+        </div>
+
+      </div>
+
+      <!-- Return Button: LEFT -->
+      <div class="return-zone left">
+        <a href="#hub" class="neo-glass-return-btn bead-cyan-return" data-return="right">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-left"></i></div>
+          <span>Return to Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 4. CREDITS: RESIGNED TO YOU (Anchor: #credits -> Return: TOP-LEFT) -->
+    <section id="page-credits" class="destination-panel" data-origin="bottom-right" data-theme="amber">
+      <div class="glass-brutal-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-amber">CREATOR FORGE &bull; OWNERSHIP MANIFESTO</div>
+          <div class="panel-meta">NODE_ID // 004-AMBER</div>
+        </div>
+        <h2 class="panel-heading">SYSTEM CREDITS</h2>
+        <p class="panel-sub">Architected, engineered, and owned by You for the Hackathon.</p>
+
+        <div class="glass-neo-card wide">
+          <div class="card-glass-glow amber-glow"></div>
+          <div class="credits-data-lines">
+            <div class="credit-row highlight-owner">
+              <span class="c-label">PROJECT LEAD & SOLE CREATOR</span>
+              <span class="c-val owner-name">Built & Designed by You</span>
+            </div>
+            <div class="credit-row">
+              <span class="c-label">APPLICATION IDENTITY</span>
+              <span class="c-val">Creator Forge (Autonomous Agent & AI Creator Matrix)</span>
+            </div>
+            <div class="credit-row">
+              <span class="c-label">MENISCUS FLUID ENGINE</span>
+              <span class="c-val">360° Parametric Socket Ring with Dynamic Cursor-Facing Quadratic Béziers</span>
+            </div>
+            <div class="credit-row">
+              <span class="c-label">DUAL-MODE OPERATING ARCHITECTURE</span>
+              <span class="c-val">Creator Review Hub &bull; Recruiter Prompt Engine & Workspace Swarm Matrix</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Return Button: TOP-LEFT -->
+      <div class="return-zone top-left">
+        <a href="#hub" class="neo-glass-return-btn bead-amber-return" data-return="bottom-right">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-up-left"></i></div>
+          <span>Return to Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 5. CONTACTS TAB WITH CHAT, WORKS, SHARED POSTS & DEAL ACCEPTANCE (Anchor: #contacts -> Return: TOP) -->
+    <section id="page-contacts" class="destination-panel" data-origin="bottom" data-theme="emerald">
+      <div class="glass-brutal-shell wide-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-emerald">CONNECTED CREATORS &bull; LIVE COMMS</div>
+          <div class="panel-meta" id="contacts-count-meta">0 CONNECTED CREATORS</div>
+        </div>
+        <h2 class="panel-heading">CREATOR COMMS & DEALS</h2>
+        <p class="panel-sub">Chat with connected creators, receive shared posts, and <strong class="text-recruiter-mode">accept project deals in Recruiter Mode</strong> to enlist them into your Group Workspace.</p>
+
+        <div class="contacts-workspace-split">
+          
+          <div class="contacts-sidebar">
+            <div class="contacts-sidebar-header">
+              <span>Saved Contacts</span>
+              <span class="deal-status-hint" id="deals-accepted-count">0 Deals Accepted</span>
+            </div>
+            <div class="contacts-list" id="contacts-list-container"></div>
+          </div>
+
+          <div class="contacts-chat-pane" id="contacts-chat-pane">
+            <div class="chat-placeholder" id="chat-placeholder">
+              <i data-lucide="users" class="large-icon glass-icon-box"></i>
+              <h3>Select a creator to open comms</h3>
+              <p>Add creators from the Home tab using the explicit "Add to Contacts" button.</p>
+            </div>
+
+            <!-- Active Conversation UI -->
+            <div class="chat-active-ui" id="chat-active-ui" style="display: none;">
+              <div class="chat-header">
+                <div class="chat-creator-info">
+                  <div class="creator-mini-avatar glass-icon-box" id="active-chat-avatar">HX</div>
+                  <div>
+                    <h4 id="active-chat-name">Creator Name</h4>
+                    <span class="active-chat-handle" id="active-chat-handle">@handle</span>
+                  </div>
+                </div>
+                
+                <div class="chat-header-actions">
+                  <button class="deal-action-btn" id="btn-accept-deal">
+                    <i data-lucide="check-circle-2"></i> <span id="deal-btn-label">Accept Deal & Enlist Agent</span>
+                  </button>
+                  <a href="#explore" class="pill-btn-sm" id="view-creator-portfolio-btn"><i data-lucide="image"></i> Works</a>
+                </div>
+              </div>
+
+              <!-- Deal Banner -->
+              <div class="deal-banner" id="deal-enlisted-banner" style="display: none;">
+                <i data-lucide="badge-check"></i> 
+                <span>Deal finalized! This creator is enrolled in your <strong>Recruiter Workspace Project Group</strong>.</span>
+              </div>
+
+              <!-- Creator Portfolio Banner -->
+              <div class="creator-portfolio-banner" id="creator-portfolio-banner">
+                <div class="portfolio-title">Recent Neural Works & Shared Posts (Click to open glowing bubble):</div>
+                <div class="portfolio-thumbnails" id="portfolio-thumbnails"></div>
+              </div>
+
+              <!-- Messages Flow -->
+              <div class="chat-messages-container" id="chat-messages-container"></div>
+
+              <!-- Chat Input Bar -->
+              <form class="chat-input-bar" id="chat-send-form">
+                <input type="text" class="chat-text-input" id="chat-text-input" placeholder="Discuss rates, share prompts, or propose scope..." autocomplete="off" />
+                <button type="submit" class="chat-send-btn glass-icon-box"><i data-lucide="send"></i> Send</button>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Return Button: TOP -->
+      <div class="return-zone top">
+        <a href="#hub" class="neo-glass-return-btn bead-emerald-return" data-return="bottom">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-up"></i></div>
+          <span>Return to Creator Forge Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 6. WORKSPACE TAB: DUAL MODE (Anchor: #workspace -> Return: TOP-RIGHT) -->
+    <section id="page-workspace" class="destination-panel" data-origin="bottom-left" data-theme="violet">
+      <div class="glass-brutal-shell wide-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-violet" id="ws-mode-pill">RECRUITER WORKSPACE &bull; AGENT GROUP COLLABORATION</div>
+          <div class="panel-meta">DUAL-MODE ENVIRONMENT</div>
+        </div>
+
+        <!-- RECRUITER VIEW: Group between accepted agents -->
+        <div class="workspace-mode-view" id="ws-recruiter-view">
+          <h2 class="panel-heading">AGENT GROUP WORKSPACE</h2>
+          <p class="panel-sub">Collaborative sandbox uniting accepted creators & autonomous agents to build a joint project.</p>
+
+          <div class="recruiter-group-matrix">
+            <div class="group-project-card">
+              <h3>Active Group Project: <span class="project-title-badge">Project Chimera-X</span></h3>
+              <p>Multi-agent pipeline integrating accepted diffusion specialists, autonomous scriptwriters, and audio synthesizers.</p>
+
+              <div class="enlisted-agents-title">ENLISTED CREATORS IN THIS WORKSPACE:</div>
+              <div class="enlisted-agents-grid" id="enlisted-agents-grid"></div>
+
+              <div class="group-action-row">
+                <button class="action-launch-btn violet-btn" id="btn-launch-collab">
+                  <i data-lucide="play"></i> RUN JOINT AGENT INFERENCE
+                </button>
+                <button class="pill-btn-sm" id="btn-sync-github">
+                  <i data-lucide="git-branch"></i> Sync Group Repo
+                </button>
+              </div>
+            </div>
+
+            <div class="group-terminal-card">
+              <div class="terminal-header">
+                <span class="term-dot"></span>
+                <span>GROUP AGENT PIPELINE TERMINAL</span>
+              </div>
+              <div class="terminal-body" id="group-terminal-body">
+                <p class="term-line">> Initializing Multi-Agent Group Workspace...</p>
+                <p class="term-line">> Accept deals with creators in the Contacts tab to add them to this group.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CREATOR VIEW: Publish Works Hub -->
+        <div class="workspace-mode-view" id="ws-creator-view" style="display: none;">
+          <h2 class="panel-heading">CREATOR PUBLISH WORKSPACE</h2>
+          <p class="panel-sub">Publish your new neural models, LoRAs, and workflow templates to the Creator Forge marketplace.</p>
+
+          <div class="glass-neo-card wide workspace-box">
+            <div class="card-glass-glow violet-glow"></div>
+            <form id="creator-publish-form" class="publish-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Asset / Model Title</label>
+                  <input type="text" id="pub-title" class="glass-input" placeholder="e.g. Hyper-Fluid Diffusion v2" required />
+                </div>
+                <div class="form-group">
+                  <label>Vertical / Category</label>
+                  <select id="pub-cat" class="glass-input">
+                    <option value="diffusion">Diffusion Model / LoRA</option>
+                    <option value="agent">Autonomous Agent Workflow</option>
+                    <option value="audio">Audio / Speech Model</option>
+                    <option value="video">Video Generation Checkpoint</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>License Price (ETH)</label>
+                  <input type="text" id="pub-price" class="glass-input" placeholder="Ξ 0.75" />
+                </div>
+                <div class="form-group">
+                  <label>Preview Image URL</label>
+                  <input type="text" id="pub-img" class="glass-input" placeholder="https://picsum.photos/seed/mywork/400/300" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Technical Description & Capabilities</label>
+                <textarea id="pub-desc" class="glass-input" rows="3" placeholder="Describe the latent space enhancements, steps, and resolution..."></textarea>
+              </div>
+
+              <button type="submit" class="action-launch-btn violet-btn">
+                <i data-lucide="upload-cloud"></i> PUBLISH ASSET TO MARKETPLACE &rarr;
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Return Button: TOP-RIGHT -->
+      <div class="return-zone top-right">
+        <a href="#hub" class="neo-glass-return-btn bead-violet-return" data-return="bottom-left">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-up-right"></i></div>
+          <span>Return to Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 7. PROFILE TAB (Anchor: #profile -> Return: RIGHT) -->
+    <section id="page-profile" class="destination-panel" data-origin="left" data-theme="orange">
+      <div class="glass-brutal-shell wide-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-orange">OPERATOR PROFILE &bull; PUBLISHED WORKS MANAGER</div>
+          <div class="panel-meta">NODE_ID // 007-ORANGE</div>
+        </div>
+        <h2 class="panel-heading">CREATOR PROFILE & WORKS</h2>
+        <p class="panel-sub">Edit your credentials, bio, and edit whatever you have published in your workspace.</p>
+
+        <div class="profile-layout-grid">
+          
+          <div class="profile-editor-card">
+            <div class="profile-header-preview">
+              <div class="avatar-editable glass-icon-box" id="profile-avatar-display">CF</div>
+              <div class="profile-preview-text">
+                <h3 id="profile-name-display">Alex Vance</h3>
+                <span id="profile-handle-display">@alex_vance</span>
+                <p id="profile-bio-display">Generative Prompt Architect & Synthetic Media Designer.</p>
+              </div>
+            </div>
+
+            <form id="profile-edit-form" class="profile-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Display Name</label>
+                  <input type="text" id="input-display-name" class="glass-input" value="Alex Vance" />
+                </div>
+                <div class="form-group">
+                  <label>Handle</label>
+                  <input type="text" id="input-handle" class="glass-input" value="alex_vance" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Specialty / Role</label>
+                <select id="input-role" class="glass-input">
+                  <option value="Diffusion Model Specialist">Diffusion Model Specialist</option>
+                  <option value="Autonomous Agent Architect">Autonomous Agent Architect</option>
+                  <option value="Neural Sound Engineer">Neural Sound Engineer</option>
+                  <option value="Video & Motion Synth Lead">Video & Motion Synth Lead</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Bio / Statement</label>
+                <textarea id="input-bio" class="glass-input" rows="2">Generative Prompt Architect & Synthetic Media Designer.</textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Avatar Monogram (2 letters)</label>
+                  <input type="text" id="input-avatar-letters" class="glass-input" maxlength="2" value="CF" />
+                </div>
+                <div class="form-group">
+                  <label>Aura Accent</label>
+                  <div class="color-picker-row">
+                    <span class="color-dot active" data-color="#f97316" style="background:#f97316;"></span>
+                    <span class="color-dot" data-color="#a3e635" style="background:#a3e635;"></span>
+                    <span class="color-dot" data-color="#f43f5e" style="background:#f43f5e;"></span>
+                    <span class="color-dot" data-color="#06b6d4" style="background:#06b6d4;"></span>
+                    <span class="color-dot" data-color="#8b5cf6" style="background:#8b5cf6;"></span>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="action-launch-btn orange-btn">SAVE PROFILE CHANGES</button>
+            </form>
+          </div>
+
+          <div class="published-manager-card">
+            <div class="published-card-header">
+              <h3>My Published Assets & Works</h3>
+              <span id="published-count-pill" class="chip-tag">2 Published</span>
+            </div>
+            <p class="published-hint">Items published via your Workspace. Click Edit to adjust details.</p>
+
+            <div class="published-items-list" id="published-items-list"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Return Button: RIGHT -->
+      <div class="return-zone right">
+        <a href="#hub" class="neo-glass-return-btn bead-orange-return" data-return="left">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-right"></i></div>
+          <span>Return to Core</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 8. INVITE TAB (Anchor: #invite -> Return: BOTTOM-RIGHT) -->
+    <section id="page-invite" class="destination-panel" data-origin="top-left" data-theme="sky">
+      <div class="glass-brutal-shell">
+        <div class="glass-panel-bar">
+          <div class="chip-pill chip-sky">NETWORK REFERRALS</div>
+          <div class="panel-meta">NODE_ID // 008-SKY</div>
+        </div>
+        <h2 class="panel-heading">INVITE A CREATOR</h2>
+        <p class="panel-sub">Share GPU credits with your collective & earn 12% lifetime model royalties.</p>
+
+        <div class="glass-neo-card wide">
+          <div class="card-glass-glow sky-glow"></div>
+          <div class="invite-flex">
+            <div class="invite-code-pill">creatorforge.market/join?ref=FORGE-VIP-PASS</div>
+            <button class="action-glass-btn copy-pass-btn">Copy Pass</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Return Button: BOTTOM-RIGHT -->
+      <div class="return-zone bottom-right">
+        <a href="#hub" class="neo-glass-return-btn bead-sky-return" data-return="top-left">
+          <div class="return-bead-circle glass-icon-box"><i data-lucide="arrow-down-right"></i></div>
+          <span>Return to Core</span>
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Share to Contact Modal -->
+  <div id="share-modal" class="share-modal-overlay">
+    <div class="share-modal-card">
+      <div class="modal-head">
+        <h4>Send Post to Contact</h4>
+        <button id="close-share-modal" class="close-btn">&times;</button>
+      </div>
+      <p id="share-post-title" class="share-post-meta">Work Title</p>
+      <div class="modal-contacts-select" id="modal-contacts-list"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
