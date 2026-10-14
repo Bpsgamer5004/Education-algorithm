@@ -1412,8 +1412,133 @@ function initWorkspaceAndPublishing() {
     });
   }
 
+  // Brand Brief Builder (Campaign Engine)
+  initBrandBriefBuilder();
+
   updateRecruiterWorkspace();
   renderPublishedWorks();
+}
+
+function initBrandBriefBuilder() {
+  const briefForm = document.getElementById('brand-brief-form');
+  const btnAiAssist = document.getElementById('btn-ai-assist-brief');
+  const previewBox = document.getElementById('active-brief-preview-box');
+  const previewTitle = document.getElementById('preview-brief-title');
+  const previewLicense = document.getElementById('preview-brief-license');
+  const previewDetails = document.getElementById('preview-brief-details');
+  const statusPill = document.getElementById('brief-status-pill');
+
+  const titleInput = document.getElementById('brief-campaign-title');
+  const typeSelect = document.getElementById('brief-content-type');
+  const styleSelect = document.getElementById('brief-style');
+  const ratioSelect = document.getElementById('brief-aspect-ratio');
+  const commSelect = document.getElementById('brief-commercial-use');
+  const budgetInput = document.getElementById('brief-budget');
+  const reqText = document.getElementById('brief-requirements');
+
+  // AI-Assisted Brief Builder Presets
+  const AI_BRIEF_PRESETS = [
+    {
+      title: "Project Nova: Cyber-Brutalist Kinetic Launch",
+      type: "AI Video & 60fps Animation",
+      style: "Neo-Brutalism & Kinetic Typography",
+      ratio: "16:9 Landscape (YouTube / Desktop / Cinema)",
+      comm: "Full Commercial Exclusive Buyout (Worldwide Perpetual)",
+      budget: "Ξ 3.20 ETH • 4 Days Turnaround",
+      req: "Generate a 45-second high-tempo teaser trailer with zero morph flicker using AnimateDiff and Flux photoreal LoRAs. Include sync 96kHz industrial audio."
+    },
+    {
+      title: "Aura Solis: Luxury Glassmorphic Fragrance Stills",
+      type: "Photoreal Diffusion Stills (Flux/SDXL)",
+      style: "Glassmorphism & Raytraced Shaders",
+      ratio: "1:1 Square (Instagram Feed / E-Commerce)",
+      comm: "Commercial Non-Exclusive (Digital Media Only, 1 Year)",
+      budget: "Ξ 1.80 ETH • 48 Hours Turnaround",
+      req: "12 ultra-sharp 4K commercial packshots showcasing perfume bottles with ray-marched caustics and subsurface scattering. High-contrast studio lighting."
+    },
+    {
+      title: "Neural Horizon: AAA Game Cinematic Lore Swarm",
+      type: "Full Multimodal Campaign (Video + Audio + Stills)",
+      style: "Dark Dystopian Anime & Mecha",
+      ratio: "4:5 Portrait & 21:9 Ultra-Wide Multiformat",
+      comm: "Full Commercial Exclusive Buyout (Worldwide Perpetual)",
+      budget: "Ξ 4.50 ETH • 7 Days Turnaround",
+      req: "Comprehensive campaign pack: 30-sec cinematic cutscene, emotional whisper-to-shout vocal stems, and 6 key art banner assets. Temporal consistency required."
+    }
+  ];
+
+  let presetIndex = 0;
+
+  if (btnAiAssist) {
+    btnAiAssist.addEventListener('click', () => {
+      const preset = AI_BRIEF_PRESETS[presetIndex % AI_BRIEF_PRESETS.length];
+      presetIndex++;
+
+      if (titleInput) titleInput.value = preset.title;
+      if (typeSelect) typeSelect.value = preset.type;
+      if (styleSelect) styleSelect.value = preset.style;
+      if (ratioSelect) ratioSelect.value = preset.ratio;
+      if (commSelect) commSelect.value = preset.comm;
+      if (budgetInput) budgetInput.value = preset.budget;
+      if (reqText) reqText.value = preset.req;
+
+      showToast("✨ AI Auto-Structured Brief: Filled from generative campaign engine!");
+    });
+  }
+
+  if (briefForm) {
+    briefForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const campaignTitle = titleInput.value.trim();
+      const contentType = typeSelect.value;
+      const visualStyle = styleSelect.value;
+      const aspectRatio = ratioSelect.value;
+      const license = commSelect.value;
+      const budget = budgetInput.value.trim() || 'Ξ 2.00 ETH';
+      const requirements = reqText.value.trim();
+
+      if (previewBox && previewDetails && previewTitle && previewLicense) {
+        previewTitle.innerText = campaignTitle;
+        previewLicense.innerText = license;
+        previewDetails.innerHTML = `
+          <div class="brief-detail-chip">
+            <span class="brief-detail-label">CONTENT TYPE</span>
+            <span class="brief-detail-val">${contentType}</span>
+          </div>
+          <div class="brief-detail-chip">
+            <span class="brief-detail-label">STYLE & AESTHETIC</span>
+            <span class="brief-detail-val">${visualStyle}</span>
+          </div>
+          <div class="brief-detail-chip">
+            <span class="brief-detail-label">ASPECT RATIO</span>
+            <span class="brief-detail-val">${aspectRatio}</span>
+          </div>
+          <div class="brief-detail-chip">
+            <span class="brief-detail-label">BUDGET & TIMELINE</span>
+            <span class="brief-detail-val">${budget}</span>
+          </div>
+          <div class="brief-detail-chip" style="grid-column: 1/-1;">
+            <span class="brief-detail-label">DIRECTIVES & SCOPE</span>
+            <span class="brief-detail-val" style="font-weight: 400; color: #94a3b8; margin-top: 0.2rem;">${requirements || 'Standard production deliverables.'}</span>
+          </div>
+        `;
+        previewBox.style.display = 'flex';
+      }
+
+      if (statusPill) {
+        statusPill.style.display = 'inline-block';
+        statusPill.innerHTML = `✓ Brief Published & Live to 24 Creators`;
+      }
+
+      // Also log into pipeline terminal
+      const terminal = document.getElementById('group-terminal-body');
+      if (terminal) {
+        terminal.innerHTML += `<p class="term-line" style="color: #a3e635;">> [BRIEF PUBLISHED] "${campaignTitle}" matching verified agents...</p>`;
+      }
+
+      showToast(`Campaign Brief "${campaignTitle}" published! Matched to verified creators.`);
+    });
+  }
 }
 
 function updateRecruiterWorkspace() {

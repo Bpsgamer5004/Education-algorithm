@@ -457,6 +457,99 @@
           <h2 class="panel-heading">AGENT GROUP WORKSPACE</h2>
           <p class="panel-sub">Collaborative sandbox uniting accepted creators & autonomous agents to build a joint project.</p>
 
+          <!-- BRAND BRIEF BUILDER (Challenge Core & Bonus Feature) -->
+          <div class="brief-builder-container" style="margin-bottom: 2rem;">
+            <div class="brief-builder-card">
+              <div class="brief-builder-head">
+                <div>
+                  <span class="chip-tag" style="background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid #8b5cf6;">BRAND CAMPAIGN ENGINE</span>
+                  <h3 style="margin-top: 0.5rem; font-size: 1.25rem;">Brand Creative Brief Builder</h3>
+                  <p style="font-size: 0.85rem; color: #94a3b8;">Publish structured campaign requirements for creator discovery, asset licensing, and commercial use.</p>
+                </div>
+                <button type="button" id="btn-ai-assist-brief" class="ai-assist-btn">
+                  <i data-lucide="sparkles"></i> AI-Assisted Brief Builder (Auto-Fill)
+                </button>
+              </div>
+
+              <!-- Brief Form -->
+              <form id="brand-brief-form" class="brief-form-grid">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Campaign Title</label>
+                    <input type="text" id="brief-campaign-title" class="glass-input" placeholder="e.g. Cyberpunk Synthwave Promo Campaign 2026" required />
+                  </div>
+                  <div class="form-group">
+                    <label>Content Type</label>
+                    <select id="brief-content-type" class="glass-input">
+                      <option value="AI Video & 60fps Animation">AI Video & 60fps Animation</option>
+                      <option value="Photoreal Diffusion Stills (Flux/SDXL)">Photoreal Diffusion Stills (Flux/SDXL)</option>
+                      <option value="Neural Voiceover & 96kHz Sound">Neural Voiceover & 96kHz Sound</option>
+                      <option value="Full Multimodal Campaign (Video + Audio + Stills)">Full Multimodal Campaign (Video + Audio + Stills)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Visual Style & Aesthetics</label>
+                    <select id="brief-style" class="glass-input">
+                      <option value="Neo-Brutalism & Kinetic Typography">Neo-Brutalism & Kinetic Typography</option>
+                      <option value="Cinematic Hyper-Realism & 35mm Grain">Cinematic Hyper-Realism & 35mm Grain</option>
+                      <option value="Glassmorphism & Raytraced Shaders">Glassmorphism & Raytraced Shaders</option>
+                      <option value="Dark Dystopian Anime & Mecha">Dark Dystopian Anime & Mecha</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Format & Aspect Ratio</label>
+                    <select id="brief-aspect-ratio" class="glass-input">
+                      <option value="16:9 Landscape (YouTube / Desktop / Cinema)">16:9 Landscape (YouTube / Desktop / Cinema)</option>
+                      <option value="9:16 Vertical (TikTok / Reels / Shorts)">9:16 Vertical (TikTok / Reels / Shorts)</option>
+                      <option value="1:1 Square (Instagram Feed / E-Commerce)">1:1 Square (Instagram Feed / E-Commerce)</option>
+                      <option value="4:5 Portrait & 21:9 Ultra-Wide Multiformat">4:5 Portrait & 21:9 Ultra-Wide Multiformat</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Commercial-Use & Licensing Requirements</label>
+                    <select id="brief-commercial-use" class="glass-input">
+                      <option value="Full Commercial Exclusive Buyout (Worldwide Perpetual)">Full Commercial Exclusive Buyout (Worldwide Perpetual)</option>
+                      <option value="Commercial Non-Exclusive (Digital Media Only, 1 Year)">Commercial Non-Exclusive (Digital Media Only, 1 Year)</option>
+                      <option value="Editorial & Non-Commercial Pilot License">Editorial & Non-Commercial Pilot License</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Target Budget & Delivery Timeline</label>
+                    <input type="text" id="brief-budget" class="glass-input" placeholder="e.g. Ξ 2.50 ETH • 5 Days Turnaround" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Creative Deliverable Requirements & Prompt Directives</label>
+                  <textarea id="brief-requirements" class="glass-input" rows="3" placeholder="Specify token guidelines, camera motion constraints, and deliverables required..."></textarea>
+                </div>
+
+                <div class="brief-actions-bar">
+                  <button type="submit" class="action-launch-btn violet-btn">
+                    <i data-lucide="send"></i> PUBLISH BRIEF & MATCH AGENTS
+                  </button>
+                  <span id="brief-status-pill" class="brief-status-badge" style="display:none;"></span>
+                </div>
+              </form>
+
+              <!-- Active Brief Display Preview -->
+              <div id="active-brief-preview-box" class="active-brief-preview" style="display:none;">
+                <div class="active-brief-head">
+                  <span class="pulse-dot"></span>
+                  <h4 id="preview-brief-title">Live Brief Title</h4>
+                  <span class="active-badge" id="preview-brief-license">Commercial Buyout</span>
+                </div>
+                <div class="active-brief-details" id="preview-brief-details"></div>
+              </div>
+            </div>
+          </div>
+
           <div class="recruiter-group-matrix">
             <div class="group-project-card">
               <h3>Active Group Project: <span class="project-title-badge">Project Chimera-X</span></h3>

@@ -130,6 +130,8 @@ CREATOR FORGE             [====================] 100% (3D WebGL + Deals + Prompt
 | **Interactive 3D Core** | ❌ None | ❌ None | ❌ None | **🔮 Three.js Dual-Glow Crystal** |
 | **Cursor-Facing Meniscus** | ❌ None | ❌ None | ❌ None | **🌀 Real-time Trigonometric Arc** |
 | **Dual Persona Switch** | ❌ None | ⚠️ Multi-Account Hassle | ❌ None | **⚡ Instant Live One-Click Toggle** |
+| **Brand Brief Builder** | ❌ None | ⚠️ Basic Job Post | ❌ None | **📋 Structured Content, Ratio & Rights** |
+| **AI-Assisted Brief Builder** | ❌ None | ❌ None | ❌ None | **✨ 1-Click Generative Auto-Fill** |
 | **Prompt Inspection Radar**| ⚠️ Static Comments | ❌ None | ⚠️ Buried in Threads | **🎯 Dedicated Verified Prompt Channels** |
 | **Agent Collaboration Matrix**| ❌ None | ❌ None | ❌ None | **🤖 Group Workspace & Terminal** |
 | **Glowing Bubble Lightbox** | ⚠️ Basic Modal | ❌ None | ⚠️ Simple Image Viewer | **🫧 Dual-Halo Glowing Lightbox** |
