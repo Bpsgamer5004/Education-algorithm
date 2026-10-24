@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initExploreSections();
   initProfileEditor();
   initPhotoLightbox();
+  initGatewayMatrix();
   initAnchorRouting();
 });
 
@@ -81,7 +82,8 @@ const CREATORS_DATA = [
 
 // App State
 let currentAppMode = 'buyer';
-let currentPageId = 'hub';
+let currentPageId = 'gateway'; // Default start page is now the All Professions Gateway!
+let activeProfessionId = 'plumber';
 const savedFavorites = new Set();
 const savedFavoritePosts = new Set();
 const savedContacts = new Map();
@@ -89,25 +91,200 @@ const acceptedDeals = new Set();
 let activeChatCreatorId = null;
 let currentPostToShare = null;
 
+/* =========================================================
+   UNIVERSAL PROFESSIONS CATALOGUE (ALL PROFESSIONS MATRIX)
+   ========================================================= */
+const PROFESSIONS_DATA = [
+  {
+    id: 'plumber',
+    name: 'Plumbers & Fluid Techs',
+    category: 'trades',
+    tag: 'Licensed Trades',
+    icon: 'wrench',
+    color: '#06b6d4',
+    shortDesc: 'Certified hydro-jetting, smart copper pipe routing, thermal leak detection & emergency repiping.',
+    features: [
+      'Acoustic Ultrasonic Leak Locator',
+      'High-Pressure Hydrojet Scrubbing (4000 PSI)',
+      'Trenchless Pipe Relining & Epoxy Seal',
+      'Emergency 24/7 Smart Valve Dispatch'
+    ],
+    crystalColors: { top: 0x06b6d4, bottom: 0x0284c7 },
+    sampleWorkers: [
+      { id: 'p1', name: 'AquaPulse Solutions', handle: '@aquapulse', spec: 'leak', role: 'Master Emergency Plumber', avatar: 'AP', color: '#06b6d4', desc: 'Commercial & residential high-precision thermal acoustic leak tracing and zero-dig trenchless pipe liner installation.', rating: '4.9★', worksCount: 142, rate: '$85/hr', template: { name: 'Thermal Pipeline Acoustic Map v2', features: ['Ultrasonic Wave Trace', 'Epoxy Hydro-Seal', 'Pressure Drop Telemetry'] }, portfolio: ['https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=400&auto=format&fit=crop'] },
+      { id: 'p2', name: 'Vortex Drain & Hydro', handle: '@vortex_plumb', spec: 'drain', role: 'Hydrojet Pipeline Specialist', avatar: 'VD', color: '#0ea5e9', desc: 'Root intrusion clearance and 4K optical sewer camera inspections with digital warranty logs.', rating: '5.0★', worksCount: 98, rate: '$95/hr', template: { name: 'Optical Sewer Log Pipeline', features: ['4K Borescope Video Audit', 'High-Torque Cutterhead Guide', 'Bio-Enzymatic Coat'] }, portfolio: ['https://images.unsplash.com/photo-1542013936693-884638332954?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=400&auto=format&fit=crop'] },
+      { id: 'p3', name: 'Precision Copper & Valve', handle: '@precision_valve', spec: 'install', role: 'Bespoke Architectural Plumber', avatar: 'PV', color: '#38bdf8', desc: 'Luxury concealed shower manifold fixtures, manifold water heating networks, and water softening matrices.', rating: '4.8★', worksCount: 67, rate: '$110/hr', template: { name: 'Smart Manifold Hydro-Balance', features: ['Balanced Return Loop', 'Anti-Scald Sensor Calibrate', 'Zero-Hammer Arrestor'] }, portfolio: ['https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'animator',
+    name: '3D Animators & Riggers',
+    category: 'creative',
+    tag: 'Motion Arts',
+    icon: 'film',
+    color: '#8b5cf6',
+    shortDesc: 'Bespoke character rigging, kinetic physics simulations, Unreal Engine 5 cinematics & Blender nodes.',
+    features: [
+      'Dual-Quaternion Muscle Rigging',
+      'Optical Motion Capture Retargeting',
+      'Niagara Volumetric Particle Dynamics',
+      '60 FPS Stylized Kinetic Keyframing'
+    ],
+    crystalColors: { top: 0x8b5cf6, bottom: 0x6d28d9 },
+    sampleWorkers: [
+      { id: 'a1', name: 'Kinetics Studio', handle: '@kinetics_3d', spec: 'rig', role: 'Lead Character Rigger & Sim', avatar: 'KS', color: '#8b5cf6', desc: 'AAA gaming character skeletons, facial blendshape FACS systems, and dynamic cloth tearing simulations.', rating: '5.0★', worksCount: 54, rate: '$120/hr', template: { name: 'FACS Facial Rig v4', features: ['52 Blendshape Calibration', 'Jaw Corrective Morphs', 'Realtime Metahuman Link'] }, portfolio: ['https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=400&auto=format&fit=crop'] },
+      { id: 'a2', name: 'Vertex Motion Lab', handle: '@vertexmotion', spec: 'vfx', role: 'Niagara VFX & 3D Animator', avatar: 'VM', color: '#a78bfa', desc: 'Unreal Engine 5 cinematic camera flythroughs, spell animations, and volumetric fluid simulation.', rating: '4.9★', worksCount: 81, rate: '$105/hr', template: { name: 'Niagara Spells Kinetic Engine', features: ['Subsurface Particle Burn', 'Dynamic Lighting Attach', 'GPU Splatting'] }, portfolio: ['https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'electrician',
+    name: 'Electricians & Smart Grid',
+    category: 'trades',
+    tag: 'Licensed Trades',
+    icon: 'zap',
+    color: '#f59e0b',
+    shortDesc: 'High-voltage panel upgrades, industrial 3-phase balancing, solar microinverter arrays & EV charging.',
+    features: [
+      '200A/400A Breaker Panel Overhaul',
+      'Infrared Thermal Circuit Audit',
+      'Tesla & Universal Level-2 EV Station',
+      'Smart Home Zigbee Automation Grid'
+    ],
+    crystalColors: { top: 0xf59e0b, bottom: 0xd97706 },
+    sampleWorkers: [
+      { id: 'e1', name: 'VoltMaster Electrical', handle: '@voltmaster', spec: 'grid', role: 'Licensed Master Electrician', avatar: 'VM', color: '#f59e0b', desc: 'Sub-panel distribution, whole-home surge suppression, and smart energy monitoring modules.', rating: '5.0★', worksCount: 160, rate: '$90/hr', template: { name: 'Thermal Load Circuit Blueprint', features: ['FLIR Thermal Scan', 'Balanced Phase Load', 'Arc-Fault Breaker Map'] }, portfolio: ['https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'ai-creator',
+    name: 'AI Creators & Latent Artists',
+    category: 'creative',
+    tag: 'Generative Tech',
+    icon: 'sparkles',
+    color: '#a3e635',
+    shortDesc: 'Custom SDXL/Flux LoRAs, ComfyUI nodal architectures, AnimateDiff video pipelines & voice clones.',
+    features: [
+      'Photoreal Skin Latent Micro-Texture',
+      'Temporal Motion Flow Stabilization',
+      '96kHz Zero-Shot Speech Synthesis',
+      'Multi-Agent Autonomous Workflows'
+    ],
+    crystalColors: { top: 0xa3e635, bottom: 0x65a30d },
+    sampleWorkers: [
+      { id: 'ai1', name: 'Vanguard Neural Studio', handle: '@0xVanguard', spec: 'diffusion', role: 'SDXL & Flux Lead Architect', avatar: 'VG', color: "#a3e635", desc: "Crafting hyper-detailed cinematic LoRAs with zero plastic skin artifacts.", rating: "4.9★", worksCount: 42, rate: "$95/hr", template: { name: "Cinematic Lighting Pipeline v4", features: ["16-Step HDR Guide", "Contrast Latent Node", "Photoreal Skin LoRA"] }, portfolio: ["https://picsum.photos/seed/vanguard1/300/200", "https://picsum.photos/seed/vanguard2/300/200"] }
+    ]
+  },
+  {
+    id: 'developer',
+    name: 'Full-Stack & Systems Devs',
+    category: 'tech',
+    tag: 'Engineering',
+    icon: 'code-2',
+    color: '#10b981',
+    shortDesc: 'High-throughput Node/Rust architectures, React/Next.js frontends, WebSockets & cloud microservices.',
+    features: [
+      'Sub-50ms Global Edge Deployments',
+      'PostgreSQL & Redis Cache Clustering',
+      'Zero-Downtime Docker Container Pods',
+      'Cryptographic Auth & Web3 Contracts'
+    ],
+    crystalColors: { top: 0x10b981, bottom: 0x047857 },
+    sampleWorkers: [
+      { id: 'd1', name: 'Apex Software Matrix', handle: '@apex_dev', spec: 'systems', role: 'Senior Systems Architect', avatar: 'AS', color: '#10b981', desc: 'Specialized in ultra-low latency real-time WebSocket pipelines, distributed messaging, and high-concurrency microservices.', rating: '5.0★', worksCount: 73, rate: '$135/hr', template: { name: 'Distributed Stream Orchestrator', features: ['Kafka Event Broker', 'Rust FFI Acceleration', 'Docker Swarm Config'] }, portfolio: ['https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'mechanic',
+    name: 'Automotive & EV Mechanics',
+    category: 'trades',
+    tag: 'Licensed Trades',
+    icon: 'car',
+    color: '#f97316',
+    shortDesc: 'OBD-II CAN bus diagnostics, high-voltage battery cell analysis, transmission rebuilds & dyno tuning.',
+    features: [
+      'CAN Bus Oscilloscope Waveform Check',
+      'Hybrid Battery Cell Voltage Balance',
+      'Precision Dual-Clutch Transmission Rebuild',
+      'Track Suspension Camber Geometry'
+    ],
+    crystalColors: { top: 0xf97316, bottom: 0xc2410c },
+    sampleWorkers: [
+      { id: 'm1', name: 'HyperDrive Precision Auto', handle: '@hyperdrive_auto', spec: 'ev', role: 'Master ASE & EV Specialist', avatar: 'HD', color: '#f97316', desc: 'Precision diagnostics on internal combustion and high-voltage electric vehicle powertrains.', rating: '4.9★', worksCount: 112, rate: '$95/hr', template: { name: 'CAN Bus Diagnostics Array', features: ['Oscilloscope Telemetry', 'Thermal Pack Sensor Map', 'Torque Curve Dyno Log'] }, portfolio: ['https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'lawyer',
+    name: 'Legal Counsel & Tech IP',
+    category: 'services',
+    tag: 'Professional',
+    icon: 'scale',
+    color: '#f43f5e',
+    shortDesc: 'AI licensing frameworks, SaaS enterprise contracts, patent protections & cross-border compliance.',
+    features: [
+      'Model Weight Commercial Licensing',
+      'GDPR & AI Act Risk Assessment',
+      'Series A Venture Term Sheet Drafting',
+      'Trademark & Patent Portfolio Moat'
+    ],
+    crystalColors: { top: 0xf43f5e, bottom: 0xbe123c },
+    sampleWorkers: [
+      { id: 'l1', name: 'Veritas Tech Law Group', handle: '@veritas_law', spec: 'ip', role: 'Managing IP & Corporate Partner', avatar: 'VL', color: '#f43f5e', desc: 'Advising deep-tech startups and creative studios on artificial intelligence intellectual property and licensing buyouts.', rating: '5.0★', worksCount: 88, rate: '$250/hr', template: { name: 'Synthetic Media Commercial Buyout v2', features: ['Perpetual Rights Grant', 'Model Inference Indemnity', 'Jurisdiction Lock'] }, portfolio: ['https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1450133064473-71024230f91b?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'doctor',
+    name: 'Healthcare & Sports Physio',
+    category: 'services',
+    tag: 'Health & Wellness',
+    icon: 'activity',
+    color: '#0ea5e9',
+    shortDesc: 'Biomechanical motion analysis, post-op rehabilitation, athletic conditioning & sports recovery.',
+    features: [
+      'Infrared Gait & Joint Stress Scan',
+      'Isometric Muscle Strength Profiling',
+      'Custom Rehabilitation Protocols',
+      'Neuromuscular Recovery Stim'
+    ],
+    crystalColors: { top: 0x0ea5e9, bottom: 0x0284c7 },
+    sampleWorkers: [
+      { id: 'h1', name: 'Apex Kinetic Sports Medicine', handle: '@apex_physio', spec: 'physio', role: 'Lead Biomechanist & DPT', avatar: 'AP', color: '#0ea5e9', desc: 'Olympic-level neuromuscular profiling, joint mobilization, and accelerated athletic recovery protocols.', rating: '4.9★', worksCount: 135, rate: '$120/hr', template: { name: 'Kinetic Chain Rehab Protocol', features: ['Joint ROM Goniometry', 'EMG Muscle Activation Map', 'Target Load Curve'] }, portfolio: ['https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop'] }
+    ]
+  }
+];
+
+// Active Creators Database (Dynamically loaded based on chosen profession!)
+let ACTIVE_PROFESSION_WORKERS = PROFESSIONS_DATA[0].sampleWorkers;
+
+function findWorkerById(id) {
+  let worker = ACTIVE_PROFESSION_WORKERS.find(w => w.id === id);
+  if (worker) return worker;
+  for (const prof of PROFESSIONS_DATA) {
+    worker = prof.sampleWorkers.find(w => w.id === id);
+    if (worker) return worker;
+  }
+  return CREATORS_DATA.find(c => c.id === id);
+}
+
 // Explore Shared Works Database
 const SHARED_WORKS = [
-  { id: 'sw-1', title: "Refractive Meniscus Orb v2", creator: "@LumaNexus", img: "https://picsum.photos/seed/orb1/600/400", desc: "Ray-marched glass refraction test rendered on Flux.1 latent core." },
-  { id: 'sw-2', title: "Cyber-Brutalist Exoskeleton", creator: "@NeuralGlitch", img: "https://picsum.photos/seed/mech2/600/400", desc: "Hard-surface edge contrast model tuned for dystopian concept art." },
-  { id: 'sw-3', title: "Hyper-Real Voice Model Sample", creator: "@SonicRes", img: "https://picsum.photos/seed/voice3/600/400", desc: "Emotional speech synthesizer with breath latency reduction." },
-  { id: 'sw-4', title: "Astral Nebula Dust Clouds", creator: "@NebulaDreams", img: "https://picsum.photos/seed/nebula4/600/400", desc: "Volumetric space gas and planetary rings rendered at 8K resolution." },
-  { id: 'sw-5', title: "Liquid Chrono Simulation Frame", creator: "@ChronoFrame", img: "https://picsum.photos/seed/chrono1/600/400", desc: "Zero-flicker liquid metal morphing node with specular refraction." },
-  { id: 'sw-6', title: "Twilight Monolith Blueprint", creator: "@AetherArch", img: "https://picsum.photos/seed/aether1/600/400", desc: "Raytraced architectural elevation render with twilight sky dynamics." }
+  { id: 'sw-1', title: "Emergency Trenchless Pipe Relining", creator: "@aquapulse", img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&auto=format&fit=crop", desc: "Zero-excavation 40ft epoxy sewer liner cured in 3 hours with hydrojet prep." },
+  { id: 'sw-2', title: "Metahuman Kinetic Rig Demo", creator: "@kinetics_3d", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop", desc: "Dual-quaternion muscle deformation running at 60 FPS in Unreal Engine 5." },
+  { id: 'sw-3', title: "400A Three-Phase Industrial Panel", creator: "@voltmaster", img: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&auto=format&fit=crop", desc: "Thermal-scanned industrial load balancing with integrated surge suppression." },
+  { id: 'sw-4', title: "Flux Photoreal Skin Caustics v2", creator: "@0xVanguard", img: "https://picsum.photos/seed/orb1/600/400", desc: "Ray-marched glass caustics and skin pore latent textures with zero plastic blur." },
+  { id: 'sw-5', title: "CAN Bus High-Voltage Cell Telemetry", creator: "@hyperdrive_auto", img: "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=600&auto=format&fit=crop", desc: "Real-time oscilloscope capture balancing 96 EV lithium battery cells." },
+  { id: 'sw-6', title: "Commercial Model Weight IP Buyout", creator: "@veritas_law", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&auto=format&fit=crop", desc: "Comprehensive enterprise IP indemnification template for generative pipelines." }
 ];
 
 // User's Published Works (Editable in Profile)
 let publishedWorks = [
-  { id: 'pw-1', title: "Hyper-Refraction Glass LoRA", cat: "diffusion", price: "Ξ 0.75", desc: "Ray-marched glass caustics model for cinematic bottles." },
-  { id: 'pw-2', title: "Autonoma Audio Splicer", cat: "audio", price: "Ξ 0.40", desc: "Splits stems into quantized 128 BPM WAV segments." }
+  { id: 'pw-1', title: "Thermal Acoustic Pipeline Map", cat: "trades", price: "$120", desc: "Ultrasonic sensor map for pinpointing subterranean pipe fractures." },
+  { id: 'pw-2', title: "Niagara Particle Swarm Template", cat: "creative", price: "$95", desc: "Realtime volumetric smoke and liquid mesh in Unreal Engine 5." }
 ];
 
 // Colors for starfield
 const PAGE_COLOR_MAP = {
-  'hub': ['rgba(163, 230, 53, ', 'rgba(168, 85, 247, ', 'rgba(16, 185, 129, '],
+  'gateway': ['rgba(6, 182, 212, ', 'rgba(139, 92, 246, ', 'rgba(163, 230, 53, '],
+  'hub': ['rgba(6, 182, 212, ', 'rgba(168, 85, 247, ', 'rgba(16, 185, 129, '],
   'homepage': ['rgba(163, 230, 53, ', 'rgba(217, 249, 157, ', 'rgba(77, 124, 15, '],
   'favorites': ['rgba(244, 63, 94, ', 'rgba(254, 205, 211, ', 'rgba(136, 19, 55, '],
   'explore': ['rgba(6, 182, 212, ', 'rgba(207, 250, 254, ', 'rgba(22, 78, 99, '],
@@ -123,21 +300,23 @@ const PAGE_COLOR_MAP = {
    ========================================================= */
 function initAnchorRouting() {
   function handleHash() {
-    const hash = window.location.hash.replace('#', '') || 'hub';
+    const hash = window.location.hash.replace('#', '') || 'gateway';
     warpTo(hash);
   }
 
   window.addEventListener('hashchange', handleHash);
 
-  // If page loaded with an existing hash, route to it
+  // If page loaded with an existing hash, route to it; else start at gateway
   if (window.location.hash) {
     handleHash();
+  } else {
+    warpTo('gateway');
   }
 }
 
 function warpTo(targetId) {
-  const validPages = ['hub', 'homepage', 'favorites', 'explore', 'credits', 'contacts', 'workspace', 'profile', 'invite'];
-  if (!validPages.includes(targetId)) targetId = 'hub';
+  const validPages = ['gateway', 'hub', 'homepage', 'favorites', 'explore', 'credits', 'contacts', 'workspace', 'profile', 'invite'];
+  if (!validPages.includes(targetId)) targetId = 'gateway';
 
   currentPageId = targetId;
   document.body.setAttribute('data-page', targetId);
@@ -148,8 +327,21 @@ function warpTo(targetId) {
     p.style.display = 'none';
   });
 
+  const gateway = document.getElementById('view-gateway');
+  if (gateway) {
+    gateway.style.display = (targetId === 'gateway') ? 'flex' : 'none';
+    if (targetId === 'gateway') gateway.classList.add('active');
+    else gateway.classList.remove('active');
+  }
+
   // Activate target
-  if (targetId === 'hub') {
+  if (targetId === 'gateway') {
+    const tagBtn = document.getElementById('active-profession-tag-btn');
+    if (tagBtn) {
+      tagBtn.textContent = 'ALL PROFESSIONS';
+      tagBtn.style.color = '#06b6d4';
+    }
+  } else if (targetId === 'hub') {
     const hub = document.getElementById('main-hub');
     if (hub) {
       hub.style.display = 'flex';
@@ -180,6 +372,171 @@ function warpTo(targetId) {
   });
 
   if (window.lucide) window.lucide.createIcons();
+}
+
+/* =========================================================
+   UNIVERSAL PROFESSION MATRIX & GATEWAY LAYER
+   ========================================================= */
+function initGatewayMatrix() {
+  const grid = document.getElementById('profession-cards-grid');
+  const searchInput = document.getElementById('gateway-search-input');
+  const catBtns = document.querySelectorAll('.gateway-cat-btn');
+  const backToGatewayBtn = document.getElementById('btn-back-to-gateway');
+
+  if (backToGatewayBtn) {
+    backToGatewayBtn.addEventListener('click', () => {
+      window.location.hash = '#gateway';
+    });
+  }
+
+  if (!grid) return;
+
+  let currentCategory = 'all';
+  let currentSearch = '';
+
+  function renderGrid() {
+    grid.innerHTML = '';
+    const q = currentSearch.toLowerCase().trim();
+
+    const filtered = PROFESSIONS_DATA.filter(p => {
+      const matchCat = (currentCategory === 'all' || p.category === currentCategory);
+      const matchSearch = !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.shortDesc.toLowerCase().includes(q) ||
+        p.tag.toLowerCase().includes(q) ||
+        p.features.some(f => f.toLowerCase().includes(q));
+      return matchCat && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 3.5rem 1rem; color: #64748b;">
+          <i data-lucide="help-circle" style="width: 44px; height: 44px; margin: 0 auto 1rem; color: #06b6d4;"></i>
+          <h3 style="color:#e2e8f0; font-size:1.15rem; margin-bottom:0.5rem;">No matching professions found</h3>
+          <p style="font-size:0.85rem;">Try searching for trades like "plumber", creative skills like "animator", or engineering keywords.</p>
+        </div>
+      `;
+      if (window.lucide) window.lucide.createIcons();
+      return;
+    }
+
+    filtered.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'profession-flip-card';
+      card.setAttribute('data-id', p.id);
+      card.style.color = p.color;
+
+      card.innerHTML = `
+        <div class="card-pulse-halo" style="background: radial-gradient(circle, ${p.color}2e 0%, ${p.color}0a 55%, transparent 75%); border: 2px solid ${p.color}88; box-shadow: 0 0 45px ${p.color}66;"></div>
+        <div class="card-flipper-inner">
+          <!-- Front Face -->
+          <div class="card-face front" style="border-color: ${p.color}44;">
+            <div class="card-front-top">
+              <div class="profession-icon-box" style="color: ${p.color}; border-color: ${p.color}; background: ${p.color}15; box-shadow: 0 0 25px ${p.color}44;">
+                <i data-lucide="${p.icon}"></i>
+              </div>
+              <span class="profession-tag-chip" style="background: ${p.color}22; color: ${p.color}; border: 1px solid ${p.color}66;">${p.tag}</span>
+            </div>
+            <div class="card-front-center">
+              <h3 class="profession-name">${p.name}</h3>
+              <p class="profession-short-desc">${p.shortDesc}</p>
+            </div>
+            <div class="card-front-bottom">
+              <span class="flip-hover-hint">
+                <i data-lucide="rotate-cw" style="width:14px; height:14px;"></i>
+                <span>Hover to flip & view specs</span>
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: ${p.color}; font-weight: 700;">${p.sampleWorkers.length} Active Pros</span>
+            </div>
+          </div>
+
+          <!-- Back Face -->
+          <div class="card-face back" style="border-color: ${p.color}; box-shadow: inset 0 0 35px ${p.color}22, 0 10px 40px ${p.color}33;">
+            <div class="back-header">
+              <span class="back-title" style="color: ${p.color};">${p.name}</span>
+              <i data-lucide="${p.icon}" style="width: 20px; height: 20px; color: ${p.color};"></i>
+            </div>
+            <div class="back-features-list">
+              ${p.features.map(f => `
+                <div class="feature-item">
+                  <i data-lucide="check-circle" style="color: ${p.color};"></i>
+                  <span>${f}</span>
+                </div>
+              `).join('')}
+            </div>
+            <button class="btn-launch-hub" style="background: ${p.color}; color: #000; box-shadow: 0 0 30px ${p.color}99;" data-id="${p.id}">
+              <span>LAUNCH 3D CRYSTAL CORE</span>
+              <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+            </button>
+          </div>
+        </div>
+      `;
+
+      const launchBtn = card.querySelector('.btn-launch-hub');
+      if (launchBtn) {
+        launchBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectProfession(p.id);
+        });
+      }
+
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.card-face.back') || e.target.closest('.btn-launch-hub')) {
+          selectProfession(p.id);
+        }
+      });
+
+      grid.appendChild(card);
+    });
+
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  catBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      catBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = btn.dataset.cat || 'all';
+      renderGrid();
+    });
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      renderGrid();
+    });
+  }
+
+  renderGrid();
+}
+
+function selectProfession(id) {
+  const prof = PROFESSIONS_DATA.find(p => p.id === id) || PROFESSIONS_DATA[0];
+  activeProfessionId = prof.id;
+  ACTIVE_PROFESSION_WORKERS = prof.sampleWorkers || [];
+
+  const tagBtn = document.getElementById('active-profession-tag-btn');
+  if (tagBtn) {
+    tagBtn.textContent = prof.name.toUpperCase();
+    tagBtn.style.color = prof.color;
+  }
+
+  if (window.updateCrystalColors && prof.crystalColors) {
+    window.updateCrystalColors(prof.crystalColors.top, prof.crystalColors.bottom);
+  }
+
+  const dirHeading = document.querySelector('#page-homepage .panel-heading');
+  if (dirHeading) dirHeading.textContent = `${prof.name.toUpperCase()} DIRECTORY`;
+  const dirPill = document.querySelector('#page-homepage .chip-pill');
+  if (dirPill) dirPill.textContent = `${prof.name.toUpperCase()} • VERIFIED SPECIALISTS`;
+
+  if (window.renderCreatorsDirectory) {
+    window.renderCreatorsDirectory();
+  }
+
+  window.location.hash = '#hub';
+  showToast(`Loaded ${prof.name} Matrix`);
 }
 
 /* =========================================================
@@ -423,6 +780,18 @@ function initSelfBuildingCrystal() {
   bottomLight.position.set(-2, -4, 2);
   scene.add(bottomLight);
 
+  window.updateCrystalColors = function(topHex, bottomHex) {
+    if (topLight) topLight.color.setHex(topHex);
+    if (bottomLight) bottomLight.color.setHex(bottomHex);
+    if (sparkMat) sparkMat.color.setHex(topHex);
+  };
+
+  // Sync initial profession colors if available
+  const initialProf = PROFESSIONS_DATA.find(p => p.id === activeProfessionId);
+  if (initialProf && initialProf.crystalColors) {
+    window.updateCrystalColors(initialProf.crystalColors.top, initialProf.crystalColors.bottom);
+  }
+
   let isDragging = false;
   let prevX = 0, prevY = 0, velX = 0, velY = 0;
 
@@ -601,11 +970,27 @@ function initCreatorsDirectory() {
     grid.innerHTML = '';
     const q = query.toLowerCase();
 
-    const filtered = CREATORS_DATA.filter(c => {
+    const activeList = (ACTIVE_PROFESSION_WORKERS && ACTIVE_PROFESSION_WORKERS.length > 0)
+      ? ACTIVE_PROFESSION_WORKERS
+      : CREATORS_DATA;
+
+    const filtered = activeList.filter(c => {
       const matchFilter = filter === 'all' || c.spec === filter;
-      const matchQuery = !q || c.name.toLowerCase().includes(q) || c.handle.toLowerCase().includes(q) || c.role.toLowerCase().includes(q);
+      const matchQuery = !q || c.name.toLowerCase().includes(q) || c.handle.toLowerCase().includes(q) || c.role.toLowerCase().includes(q) || (c.desc && c.desc.toLowerCase().includes(q));
       return matchFilter && matchQuery;
     });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: #64748b;">
+          <i data-lucide="search-x" style="width: 44px; height: 44px; margin: 0 auto 1rem; color: #a3e635;"></i>
+          <h3 style="color:#e2e8f0; font-size:1.15rem; margin-bottom:0.5rem;">No verified professionals found</h3>
+          <p style="font-size:0.85rem;">Try adjusting your search query or reset filter pills.</p>
+        </div>
+      `;
+      if (window.lucide) window.lucide.createIcons();
+      return;
+    }
 
     filtered.forEach(c => {
       const isLiked = savedFavorites.has(c.id);
@@ -704,6 +1089,12 @@ function initCreatorsDirectory() {
       renderCreators(btn.dataset.filter, query);
     });
   });
+
+  window.renderCreatorsDirectory = function() {
+    const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    const query = searchInput ? searchInput.value : '';
+    renderCreators(activeFilter, query);
+  };
 }
 
 function showToast(msg) {
@@ -768,7 +1159,7 @@ function updateFavoritesTab() {
       `;
     } else {
       savedFavorites.forEach(id => {
-        const creator = CREATORS_DATA.find(c => c.id === id);
+        const creator = findWorkerById(id);
         if (!creator) return;
 
         const avatarPhotoUrl = creator.portfolio && creator.portfolio.length > 0 ? creator.portfolio[0] : `https://picsum.photos/seed/avatar${creator.id}/500/500`;
@@ -1316,7 +1707,7 @@ function renderContactsList() {
 
 function openChatWithCreator(id) {
   activeChatCreatorId = id;
-  const creator = savedContacts.get(id);
+  const creator = savedContacts.get(id) || findWorkerById(id);
   if (!creator) return;
 
   const placeholder = document.getElementById('chat-placeholder');
@@ -1558,7 +1949,7 @@ function updateRecruiterWorkspace() {
   }
 
   acceptedDeals.forEach(id => {
-    const creator = CREATORS_DATA.find(c => c.id === id);
+    const creator = findWorkerById(id);
     if (!creator) return;
 
     const pill = document.createElement('div');

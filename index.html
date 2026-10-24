@@ -40,24 +40,68 @@
 
     <!-- Top Mode Switcher Bar -->
     <header class="app-top-nav">
-      <div class="mode-switcher-capsule">
-        <span class="mode-label">PERSONA:</span>
-        <button class="mode-toggle-btn active" id="btn-mode-buyer" data-mode="buyer">
-          <i data-lucide="shopping-bag"></i> Creator / Explorer
+      <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+        <button id="btn-back-to-gateway" class="gateway-switch-btn" title="Back to All Professions Gateway">
+          <i data-lucide="layout-grid"></i>
+          <span id="active-profession-tag-btn">ALL PROFESSIONS</span>
         </button>
-        <button class="mode-toggle-btn" id="btn-mode-recruiter" data-mode="recruiter">
-          <i data-lucide="briefcase"></i> Recruiter / Studio
-        </button>
+
+        <div class="mode-switcher-capsule">
+          <span class="mode-label">PERSONA:</span>
+          <button class="mode-toggle-btn active" id="btn-mode-buyer" data-mode="buyer">
+            <i data-lucide="user"></i> Client / Explorer
+          </button>
+          <button class="mode-toggle-btn" id="btn-mode-recruiter" data-mode="recruiter">
+            <i data-lucide="briefcase"></i> Employer / Studio
+          </button>
+        </div>
       </div>
 
       <div class="active-mode-badge" id="mode-badge-indicator">
         <span class="mode-pulse"></span>
-        <span id="mode-text-desc">CREATOR MODE (REVIEWS & PORTFOLIO ACCESS)</span>
+        <span id="mode-text-desc">EXPLORATION MODE &bull; ALL SERVICES</span>
       </div>
     </header>
 
-    <!-- 0. MAIN HUB VIEW -->
-    <main id="main-hub" class="view-panel active">
+    <!-- =========================================================
+         GATEWAY LAYER: ALL PROFESSIONS MATRIX WITH 3D FLIP CARDS
+         ========================================================= -->
+    <section id="view-gateway" class="gateway-matrix-panel">
+      <div class="gateway-hero-box">
+        <div class="neo-glass-tag">
+          <span class="pulse-bead"></span>
+          <span>UNIVERSAL PROFESSION MATRIX &bull; ARCHITECT: B. PAWAN SAI</span>
+        </div>
+        <h1 class="gateway-title">
+          <span>CHOOSE YOUR</span>
+          <span class="text-neon-cyan">PROFESSION</span>
+        </h1>
+        <p class="gateway-subtitle">
+          From master plumbers and 3D animators to autonomous AI developers. Hover to flip and inspect signature capabilities, then click to launch the dedicated 3D crystal matrix.
+        </p>
+
+        <!-- Gateway Search & Category Filter Pills -->
+        <div class="gateway-filter-bar">
+          <div class="gateway-search-wrap">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" id="gateway-search-input" class="gateway-search-input" placeholder="Search any profession, trade, or skill (e.g. Plumber, Animator, Electrician)..." />
+          </div>
+          <div class="gateway-category-pills">
+            <button class="gateway-cat-btn active" data-cat="all">All Professions</button>
+            <button class="gateway-cat-btn" data-cat="trades">Local & Physical Trades</button>
+            <button class="gateway-cat-btn" data-cat="creative">Digital & Animation</button>
+            <button class="gateway-cat-btn" data-cat="tech">Tech & Engineering</button>
+            <button class="gateway-cat-btn" data-cat="services">Professional Services</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Flip Profession Cards Grid -->
+      <div class="profession-cards-grid" id="profession-cards-grid"></div>
+    </section>
+
+    <!-- 0. MAIN HUB VIEW (3D CRYSTAL & MENISCUS) -->
+    <main id="main-hub" class="view-panel" style="display:none;">
       
       <header class="hub-hero">
         <div class="neo-glass-tag">
@@ -333,20 +377,24 @@
           <div class="card-glass-glow amber-glow"></div>
           <div class="credits-data-lines">
             <div class="credit-row highlight-owner">
-              <span class="c-label">PROJECT LEAD & SOLE CREATOR</span>
-              <span class="c-val owner-name">Built & Designed by You</span>
+              <span class="c-label">FOUNDER & SOLE ARCHITECT</span>
+              <span class="c-val owner-name">B. Pawan Sai</span>
             </div>
             <div class="credit-row">
-              <span class="c-label">APPLICATION IDENTITY</span>
-              <span class="c-val">Creator Forge (Autonomous Agent & AI Creator Matrix)</span>
+              <span class="c-label">CO-ARCHITECTURAL TOOL</span>
+              <span class="c-val" style="color: #a3e635; font-weight:700;">Antigravity (Google DeepMind)</span>
+            </div>
+            <div class="credit-row">
+              <span class="c-label">PLATFORM SCOPE</span>
+              <span class="c-val">Universal Decentralized Services & Profession Matrix (Animators, Plumbers, Trades & Digital)</span>
             </div>
             <div class="credit-row">
               <span class="c-label">MENISCUS FLUID ENGINE</span>
               <span class="c-val">360° Parametric Socket Ring with Dynamic Cursor-Facing Quadratic Béziers</span>
             </div>
             <div class="credit-row">
-              <span class="c-label">DUAL-MODE OPERATING ARCHITECTURE</span>
-              <span class="c-val">Creator Review Hub &bull; Recruiter Prompt Engine & Workspace Swarm Matrix</span>
+              <span class="c-label">OPERATING ARCHITECTURE</span>
+              <span class="c-val">Multi-Profession Service Hub &bull; Direct Deals & Autonomous Workspace</span>
             </div>
           </div>
         </div>
