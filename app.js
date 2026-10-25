@@ -297,6 +297,246 @@ const PROFESSIONS_DATA = [
       { id: 'h5', name: 'RunnersGait Motion Analysis', handle: '@runnersgait', spec: 'gait', role: 'Running Specialist & Orthotist', avatar: 'RG', color: '#0ea5e9', desc: 'High-speed 240 FPS video running gait analysis, cadence optimization, plantar fascia loading profiles, and custom carbon orthotics.', rating: '4.9★', worksCount: 148, rate: '$110/hr', template: { name: 'High-Speed 2D/3D Running Gait Scan', features: ['Overstriding Braking Force Scan', 'Cadence 170-180 BPM Tuning', 'Tissue Tolerance Loading Ladder'] }, portfolio: ['https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop'] },
       { id: 'h6', name: 'CryoHyperbaric Recovery Hub', handle: '@cryo_recovery', spec: 'recovery', role: 'Sports Physiologist & Recovery Specialist', avatar: 'CR', color: '#0369a1', desc: 'Photobiomodulation red light therapy, pneumatic compression boots, hyperbaric oxygen conditioning, and HRV recovery tracking.', rating: '5.0★', worksCount: 120, rate: '$140/hr', template: { name: 'Elite Athlete HRV Recovery Cycle', features: ['Daily Autonomic Balance Telemetry', 'Hyperbaric Tissue Oxygenation', 'Targeted Vasoconstriction Protocol'] }, portfolio: ['https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop'] }
     ]
+  },
+  {
+    id: 'zero-g-botanist',
+    name: 'Zero-G Botanist',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'sprout',
+    color: '#4ade80',
+    shortDesc: 'Cultivating floating flora and managing low-gravity hydroponic biospheres.',
+    features: [
+      'Microgravity Aeroponic Nutrient Mist Matrix',
+      'Cyclic Photoperiod Luminescence Balancing',
+      'Genetic Adaptation for Radiation-Proof Stems',
+      'Symbiotic Closed-Loop Oxygen-Scrubbing Flora'
+    ],
+    crystalColors: { top: 0x4ade80, bottom: 0x15803d },
+    sampleWorkers: [
+      { id: 'zgb-1', name: 'Kaelen Voss', handle: '@kaelen_voss', spec: 'hydroponics', role: 'Lead Microgravity Botanist', avatar: 'KV', color: '#4ade80', desc: 'Managing zero-G root systems, automated nutrient infusion loops, and cosmic radiation shielding for extraterrestrial flora.', rating: '4.9★', worksCount: 104, rate: '$135/hr', template: { name: 'Zero-G Hydroponic Flora Matrix', features: ['Capillary Root Hydration Loop', 'Photosynthetic Photon Optimization', 'Ethylene Gas Scrubber Calibration'] }, portfolio: ['https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&auto=format&fit=crop'] },
+      { id: 'zgb-2', name: 'Lyra Vane', handle: '@lyra_vane', spec: 'biospheres', role: 'Orbital Biosphere Architect', avatar: 'LV', color: '#22c55e', desc: 'Engineers self-sustaining geodesic biospheres on Lagrange station pods with closed-cycle ecological balance.', rating: '5.0★', worksCount: 88, rate: '$150/hr', template: { name: 'Closed-Loop Biosphere Blueprint', features: ['Biomass Recycling Equilibrium', 'Microbial Nitrogen Cycling', 'Atmospheric CO2 Regulating Matrix'] }, portfolio: ['https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop'] },
+      { id: 'zgb-3', name: 'Zephyr Thorne', handle: '@zephyr_thorne', spec: 'flora', role: 'Exo-Flora Geneticist', avatar: 'ZT', color: '#86efac', desc: 'Specializing in bioluminescent floating mosses, accelerated cellular spore reproduction, and spore-based oxygen filtration.', rating: '4.8★', worksCount: 76, rate: '$140/hr', template: { name: 'Bioluminescent Spore Disperser', features: ['Luciferase Enzyme Optimization', 'Gravity-Independent Pollination', 'Sub-Zero Cell Membrane Fortification'] }, portfolio: ['https://images.unsplash.com/photo-1508873696983-2df5293cb32f?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&auto=format&fit=crop'] },
+      { id: 'zgb-4', name: 'Soren Cruz', handle: '@soren_cruz', spec: 'hydroponics', role: 'Deep-Space Crop Yield Optimizer', avatar: 'SC', color: '#16a34a', desc: 'Maximizing calorie yields per cubic meter in pressurized transit freight modules through vertical hydroponic towers.', rating: '4.9★', worksCount: 92, rate: '$125/hr', template: { name: 'High-Density Vertical Growth Tower', features: ['Spectral LED Pulse Driver', 'Automated Pruning Drone Swarm', 'Mycorrhizal Fungal Inoculation'] }, portfolio: ['https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400&auto=format&fit=crop'] },
+      { id: 'zgb-5', name: 'Nyx Calder', handle: '@nyx_calder', spec: 'biospheres', role: 'Algae Bio-Reactor Engineer', avatar: 'NC', color: '#4ade80', desc: 'High-velocity spirulina and chlorella photobioreactors supplying station crews with continuous oxygen and protein synthesis.', rating: '5.0★', worksCount: 115, rate: '$145/hr', template: { name: 'Continuous Flow Photobioreactor', features: ['Turbulent Micro-Vortex Mixing', 'Solar Flux Waveguide Feed', 'Automated Centrifugal Harvester'] }, portfolio: ['https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?w=400&auto=format&fit=crop'] },
+      { id: 'zgb-6', name: 'Orson Vale', handle: '@orson_vale', spec: 'flora', role: 'Symbiotic Fungal Cultivator', avatar: 'OV', color: '#15803d', desc: 'Cultivating cosmic fungal mycelium networks that break down organic waste into fertile hydroponic substrate.', rating: '4.7★', worksCount: 68, rate: '$120/hr', template: { name: 'Mycelial Waste Conversion Grid', features: ['Enzymatic Decomposition Loop', 'Chitin Structural Matrix', 'Pathogen Neutralization Filter'] }, portfolio: ['https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'kinetic-drift-pilot',
+    name: 'Kinetic Drift Pilot',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'navigation',
+    color: '#06b6d4',
+    shortDesc: 'Navigating freight and vessels through asteroid belts and zero-G slipstreams.',
+    features: [
+      'Sub-Millisecond RCS Thrust Vectoring',
+      'Gravitational Slingshot Velocity Profiling',
+      'Dense Asteroid Field Collision Evasion Matrix',
+      'Relativistic Slipstream Insertion Protocols'
+    ],
+    crystalColors: { top: 0x06b6d4, bottom: 0x0369a1 },
+    sampleWorkers: [
+      { id: 'kdp-1', name: 'Jaxen Rooks', handle: '@jaxen_rooks', spec: 'drift', role: 'Master Slipstream Navigator', avatar: 'JR', color: '#06b6d4', desc: 'Pioneering high-G asteroid belt transits with manual neural-link RCS thruster overrides.', rating: '5.0★', worksCount: 147, rate: '$175/hr', template: { name: 'Neural-Link Slipstream Insertion', features: ['Lagrangian Vector Calibration', 'Micro-Meteoroid Deflection Drift', 'Auxiliary Plasma Boost Vector'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop'] },
+      { id: 'kdp-2', name: 'Tora Vance', handle: '@tora_vance', spec: 'freight', role: 'Heavy Orbital Hauler Captain', avatar: 'TV', color: '#22d3ee', desc: 'Piloting multi-megaton ore barges through dense Jovian debris fields with zero hull stress fractures.', rating: '4.9★', worksCount: 112, rate: '$160/hr', template: { name: 'High-Mass Cargo Inertia Damper', features: ['Tethered Mass Center Balancing', 'Braking Burn Vector Plan', 'Tidal Stress Resonance Offset'] }, portfolio: ['https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop'] },
+      { id: 'kdp-3', name: 'Vespera Kross', handle: '@vespera_kross', spec: 'evasion', role: 'Deep-Space Interceptor Pilot', avatar: 'VK', color: '#38bdf8', desc: 'Extreme evasion trajectory computation through chaotic electromagnetic planetary storm belts.', rating: '5.0★', worksCount: 98, rate: '$190/hr', template: { name: 'Kinetic Evasion Trajectory Grid', features: ['Predictive Collision Horizon', 'Reaction Wheel Pulse Strobe', 'Magnetosphere Shield Slingshot'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=400&auto=format&fit=crop'] },
+      { id: 'kdp-4', name: 'Cassian Drake', handle: '@cassian_drake', spec: 'drift', role: 'Asteroid Slingshot Specialist', avatar: 'CD', color: '#0ea5e9', desc: 'Exploiting orbital mechanics and micro-gravity wells to achieve hyper-efficient interplanetary transit burns.', rating: '4.8★', worksCount: 84, rate: '$155/hr', template: { name: 'Gravitational Gravity-Assist Sweep', features: ['Pericenter Burn Optimization', 'Orbital Eccentricity Lock', 'Minimal Fuel Trajectory Solution'] }, portfolio: ['https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop'] },
+      { id: 'kdp-5', name: 'Mira Sterling', handle: '@mira_sterling', spec: 'freight', role: 'Zero-G Docking Master', avatar: 'MS', color: '#06b6d4', desc: 'Precision docking of ultra-class star cruisers and space stations with zero-tolerance laser-guided alignment.', rating: '4.9★', worksCount: 130, rate: '$145/hr', template: { name: 'Sub-Centimeter Laser Dock Protocol', features: ['Magnetic Coupler Damping', 'Thruster Backwash Minimizer', 'Atmospheric Seal Telemetry'] }, portfolio: ['https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop'] },
+      { id: 'kdp-6', name: 'Ronan Voss', handle: '@ronan_voss', spec: 'evasion', role: 'Atmospheric Skim Pilot', avatar: 'RV', color: '#0284c7', desc: 'High-velocity atmospheric aerobraking in extreme upper thermospheres of gas giants for rapid orbital capture.', rating: '4.9★', worksCount: 79, rate: '$165/hr', template: { name: 'Upper-Atmosphere Aerobrake Profile', features: ['Thermal Shield Heat Dissipation', 'Shockwave Boundary Layer Trim', 'Vorticity Angle Control'] }, portfolio: ['https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'orbital-welder',
+    name: 'Orbital Welder',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'flame',
+    color: '#f97316',
+    shortDesc: 'Constructing and repairing space-station hull plating in a vacuum.',
+    features: [
+      'High-Energy Electron Beam Vacuum Fusion',
+      'Cryogenic Stress-Relief Thermal Bonding',
+      'Micron-Tolerance Micrometeoroid Patching',
+      'Magnetic Tether Zero-Recoil Welding Rig'
+    ],
+    crystalColors: { top: 0xf97316, bottom: 0x9a3412 },
+    sampleWorkers: [
+      { id: 'ow-1', name: 'Brantley Steel', handle: '@brantley_steel', spec: 'electron_beam', role: 'Master Vacuum Welder', avatar: 'BS', color: '#f97316', desc: 'Electron-beam fusion on multi-layered station outer hulls with zero atmospheric gas contamination.', rating: '5.0★', worksCount: 165, rate: '$150/hr', template: { name: 'Electron Beam Vacuum Fusion Spec', features: ['Zero-Gas Molten Pool Control', 'Titanium-Alloy Lattice Bond', 'Post-Weld Ultrasonic X-Ray Scan'] }, portfolio: ['https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop'] },
+      { id: 'ow-2', name: 'Thalia Vance', handle: '@thalia_vance', spec: 'hull_plating', role: 'Station Hull Reinforcement Tech', avatar: 'TV', color: '#fb923c', desc: 'Installing Whipple micrometeorite shields and carbon-nanotube composite outer bulkheads.', rating: '4.9★', worksCount: 124, rate: '$140/hr', template: { name: 'Whipple Shield Installation Rig', features: ['Impact Dispersion Layering', 'Standoff Distance Verification', 'Thermal Expansion Joint Lock'] }, portfolio: ['https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop'] },
+      { id: 'ow-3', name: 'Krenshaw Briggs', handle: '@krenshaw_briggs', spec: 'cryogenic', role: 'Cryo-Thermal Structural Welder', avatar: 'KB', color: '#ea580c', desc: 'Conducting high-temp plasma arc seam welding in shaded sub-zero environments without thermal shock cracking.', rating: '4.8★', worksCount: 95, rate: '$135/hr', template: { name: 'Cryogenic Stress Relief Protocol', features: ['Induction Pre-Heat Matrix', 'Controlled Annealing Blanket', 'Zero-Brittleness Grain Structure'] }, portfolio: ['https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop'] },
+      { id: 'ow-4', name: 'Vora Steel', handle: '@vora_steel', spec: 'electron_beam', role: 'Zero-G Truss Fabrication Lead', avatar: 'VS', color: '#f97316', desc: 'Assembling expansive photovoltaic solar array trusses and radiator cooling booms in high orbit.', rating: '4.9★', worksCount: 110, rate: '$145/hr', template: { name: 'Orbital Truss Geometric Alignment', features: ['Laser Rangefinder Truing', 'Cold Welding Prevention Barrier', 'High-Tensile Guy Wire Rig'] }, portfolio: ['https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop'] },
+      { id: 'ow-5', name: 'Corbin Steel', handle: '@corbin_steel', spec: 'hull_plating', role: 'EVA Emergency Hull Patcher', avatar: 'CS', color: '#c2410c', desc: 'Rapid-deployment space-walk hull patching following decompression events and debris strikes.', rating: '5.0★', worksCount: 142, rate: '$170/hr', template: { name: 'Emergency Decompression Seal Patch', features: ['Instant Epoxy Membrane Seal', 'Magnetic Anchor Clamp System', 'Atmosphere Retention Pressure Test'] }, portfolio: ['https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop'] },
+      { id: 'ow-6', name: 'Taron Forge', handle: '@taron_forge', spec: 'cryogenic', role: 'Laser Cladding & Refurbisher', avatar: 'TF', color: '#fb923c', desc: 'Direct energy deposition laser cladding to resurface eroded airlock seals and docking collars.', rating: '4.7★', worksCount: 78, rate: '$130/hr', template: { name: 'DED Laser Clad Resurfacing Unit', features: ['Cobalt Superalloy Powder Feed', 'Sub-Micron Surface Polish', 'Hermetic Vacuum Gasket Seat'] }, portfolio: ['https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'atmospheric-scavenger',
+    name: 'Atmospheric Scavenger',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'wind',
+    color: '#38bdf8',
+    shortDesc: 'Harvesting gases and energy particles from high-altitude gas giants.',
+    features: [
+      'Helium-3 & Deuterium Cryo-Scoop Array',
+      'Magnetic Plasma Induction Funneling',
+      'Supercritical Vortex Turbulator Filters',
+      'Deep-Troposphere Buoyancy Regulator'
+    ],
+    crystalColors: { top: 0x38bdf8, bottom: 0x0284c7 },
+    sampleWorkers: [
+      { id: 'as-1', name: 'Zephyrine Vance', handle: '@zephyrine_vance', spec: 'gas_harvesting', role: 'Lead Gas Giant Harvester', avatar: 'ZV', color: '#38bdf8', desc: 'Extracting precious Helium-3 isotopes and deuterium from upper cloud layers of Jovian-class gas giants.', rating: '5.0★', worksCount: 138, rate: '$160/hr', template: { name: 'Helium-3 Cryogenic Scoop Array', features: ['Centrifugal Isotope Separator', 'Cryo-Condenser Stage 4', 'Vortex Induction Ram-Air Intake'] }, portfolio: ['https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop'] },
+      { id: 'as-2', name: 'Orion Sky', handle: '@orion_sky', spec: 'plasma', role: 'Atmospheric Plasma Collector', avatar: 'OS', color: '#7dd3fc', desc: 'Deploying high-altitude magnetic scoops to channel energetic ionized plasma into containment capacitors.', rating: '4.9★', worksCount: 96, rate: '$150/hr', template: { name: 'Magnetic Plasma Funnel Rig', features: ['Superconducting Coil Stator', 'Ionized Stream Compressor', 'Capacitive Flux Storage Bank'] }, portfolio: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&auto=format&fit=crop'] },
+      { id: 'as-3', name: 'Caelum Reed', handle: '@caelum_reed', spec: 'gases', role: 'Noble Gas Refining Chemist', avatar: 'CR', color: '#0ea5e9', desc: 'Fractional condensation and purification of xenon, krypton, and neon for ion propulsion fuel drives.', rating: '4.8★', worksCount: 82, rate: '$140/hr', template: { name: 'Fractional Noble Gas Distillation', features: ['Sub-Kelvin Pressure Column', '99.999% Xenon Purity Assure', 'High-Pressure Composite Cylinder Stash'] }, portfolio: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop'] },
+      { id: 'as-4', name: 'Theron Gale', handle: '@theron_gale', spec: 'gas_harvesting', role: 'Atmospheric Skim Engineer', avatar: 'TG', color: '#38bdf8', desc: 'Maintaining aerostats and skimming drones navigating high-shear jet streams on Neptune-analog planets.', rating: '4.9★', worksCount: 115, rate: '$145/hr', template: { name: 'High-Shear Aerostat Stabilizer', features: ['Ballast Gas Thermal Expansion', 'Turbulence Damping Gyros', 'Lightning Grounding Grid Array'] }, portfolio: ['https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop'] },
+      { id: 'as-5', name: 'Lyra Sky', handle: '@lyra_sky', spec: 'plasma', role: 'Radiation Storm Siphon Tech', avatar: 'LS', color: '#0284c7', desc: 'Harvesting charged solar proton bursts inside magnetospheres using deployable tether antennas.', rating: '4.7★', worksCount: 71, rate: '$155/hr', template: { name: 'Electrodynamic Tether Harvester', features: ['Kevlar-Copper Hybrid Tether', 'Lorenz Force Stabilizer', 'Direct DC Induction Converter'] }, portfolio: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&auto=format&fit=crop'] },
+      { id: 'as-6', name: 'Soren Wind', handle: '@soren_wind', spec: 'gases', role: 'Vortex Cloud Harvester', avatar: 'SW', color: '#bae6fd', desc: 'Directs drone swarms into high-pressure cloud vortex funnels to skim hydrocarbon aerosols and methane ice.', rating: '5.0★', worksCount: 104, rate: '$135/hr', template: { name: 'Methane Slush Condenser Loop', features: ['Centrifugal Phase Separator', 'Aerosol Coalescence Filter', 'Liquid Methane Cryo-Tanker Lock'] }, portfolio: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'gravity-harness-engineer',
+    name: 'Gravity Harness Engineer',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'magnet',
+    color: '#a855f7',
+    shortDesc: 'Calibrating anti-gravity repulsors and inertial dampeners on starships.',
+    features: [
+      'Graviton Flux Waveguide Alignment',
+      'Inertial Compensation Sub-Millisecond Tuning',
+      'Micro-Singularity Containment Matrices',
+      'Artificial G-Deck Field Homogenizer'
+    ],
+    crystalColors: { top: 0xa855f7, bottom: 0x6b21a8 },
+    sampleWorkers: [
+      { id: 'ghe-1', name: 'Alistair Vance', handle: '@alistair_vance', spec: 'graviton', role: 'Chief Gravitonics Architect', avatar: 'AV', color: '#a855f7', desc: 'Calibrating sub-atomic graviton emitters to prevent tidal shear during relativistic maneuvers.', rating: '5.0★', worksCount: 172, rate: '$180/hr', template: { name: 'Graviton Waveguide Resonator', features: ['Phase-Coherent Graviton Flux', 'Zero-G Inertia Offset Matrix', 'Harmonic Resonance Damping'] }, portfolio: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop'] },
+      { id: 'ghe-2', name: 'Corina Vance', handle: '@corina_vance', spec: 'inertial', role: 'Inertial Dampener Lead Specialist', avatar: 'CV', color: '#c084fc', desc: 'Tuning 100G sudden deceleration dampening fields to protect crew biological tissue integrity.', rating: '4.9★', worksCount: 133, rate: '$165/hr', template: { name: 'Sub-Millisecond Inertial Compensation', features: ['Predictive G-Force Spike Absorber', 'Somatic Density Equilibrium', 'Buffer Field Redundancy Gate'] }, portfolio: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop'] },
+      { id: 'ghe-3', name: 'Darius Kross', handle: '@darius_kross', spec: 'repulsor', role: 'Anti-Gravity Repulsor Tuner', avatar: 'DK', color: '#9333ea', desc: 'Planetary landing repulsor array optimization for super-heavy dreadnoughts in deep gravity wells.', rating: '4.8★', worksCount: 91, rate: '$155/hr', template: { name: 'Planetary Repulsor Flux Array', features: ['Local Gravity Well Nullification', 'Ground-Effect Force Equalizer', 'Superconducting Coil Cooling Loop'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop'] },
+      { id: 'ghe-4', name: 'Selene Drake', handle: '@selene_drake', spec: 'graviton', role: 'Micro-Singularity Containment Tech', avatar: 'SD', color: '#d8b4fe', desc: 'Maintaining artificial magnetic and gravitational containment fields for quantum micro-singularity power cores.', rating: '5.0★', worksCount: 108, rate: '$195/hr', template: { name: 'Singularity Event-Horizon Cage', features: ['Tachyon Feedback Governor', 'Event-Horizon Stress Sensor', 'Emergency Decay Vent System'] }, portfolio: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop'] },
+      { id: 'ghe-5', name: 'Kaelen Sterling', handle: '@kaelen_sterling', spec: 'inertial', role: 'Artificial Gravity Deck Gridder', avatar: 'KS', color: '#a855f7', desc: 'Laying out floor-plate graviton induction grids providing seamless 1.0G standard environment across ship decks.', rating: '4.7★', worksCount: 84, rate: '$140/hr', template: { name: '1.0G Floorplate Uniformity Grid', features: ['Zero-Gradient Footing Sensor', 'Deck Boundary Cutoff Field', 'Low-Vibration Floor Coil Array'] }, portfolio: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop'] },
+      { id: 'ghe-6', name: 'Tahlia Rooks', handle: '@tahlia_rooks', spec: 'repulsor', role: 'Tidal Gravity Shield Specialist', avatar: 'TR', color: '#7e22ce', desc: 'Defending orbital installations from tidal gravity shearing effects caused by orbiting close binary stars.', rating: '4.9★', worksCount: 119, rate: '$170/hr', template: { name: 'Tidal Gravitational Shield Curtain', features: ['Differential Shear Counter-Wave', 'Binary Resonance Frequency Lock', 'Capacitive Surge Dissipator'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'bio-mechanic-tuner',
+    name: 'Bio-Mechanic Tuner',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'activity',
+    color: '#ec4899',
+    shortDesc: 'Upgrading and maintaining zero-G prosthetic limbs and cybernetic skeletal anchors.',
+    features: [
+      'Carbon-Titanium Skeletal Anchor Fusion',
+      'Neural Sync Latency Zeroing (<1ms)',
+      'Vacuum-Sealed Synthetic Dermal Gaskets',
+      'High-Torque Micro-Hydraulic Joint Servos'
+    ],
+    crystalColors: { top: 0xec4899, bottom: 0x9d174d },
+    sampleWorkers: [
+      { id: 'bmt-1', name: 'Valen Cruz', handle: '@valen_cruz', spec: 'neural_sync', role: 'Master Neural-Cyberneticist', avatar: 'VC', color: '#ec4899', desc: 'Synchronizing brain-stem neural implants with multi-axis cybernetic limbs for zero-latency vacuum operation.', rating: '5.0★', worksCount: 154, rate: '$165/hr', template: { name: 'Sub-Millisecond Neural Link Sync', features: ['Bi-Directional Sensory Feedback', 'Synaptic Jitter Compensation', 'Myoelectric Signal Amplifier'] }, portfolio: ['https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop'] },
+      { id: 'bmt-2', name: 'Tyrus Calder', handle: '@tyrus_calder', spec: 'skeletal_anchors', role: 'Osseointegration Surgeon & Tuner', avatar: 'TC', color: '#f472b6', desc: 'Fusing titanium trabecular bone anchors directly into bone matrices for extreme torque zero-G EVA prosthetics.', rating: '4.9★', worksCount: 118, rate: '$175/hr', template: { name: 'Titanium Osseointegration Anchor', features: ['Trabecular Porous Bone Ingrowth', 'Zero-Torque Shearing Interface', 'Anti-Microbial Silver Nanocoating'] }, portfolio: ['https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop'] },
+      { id: 'bmt-3', name: 'Nyx Vane', handle: '@nyx_vane', spec: 'prosthetics', role: 'Microgravity Prosthetic Architect', avatar: 'NV', color: '#db2777', desc: 'Engineering modular multi-tool robotic hands with integrated gas jets and magnetic anchor palms.', rating: '4.8★', worksCount: 92, rate: '$150/hr', template: { name: 'Zero-G Multi-Tool Hand Assembly', features: ['Magnetic Palm Electromagnet', 'Micro-Pneumatic Finger Servos', 'Hermetic Vacuum Dermal Gasket'] }, portfolio: ['https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop'] },
+      { id: 'bmt-4', name: 'Cassian Vale', handle: '@cassian_vale', spec: 'skeletal_anchors', role: 'Spinal Exosuit Integrator', avatar: 'CV', color: '#f472b6', desc: 'Anchoring motorized external spine trusses that eliminate zero-G bone demineralization and muscular atrophy.', rating: '4.9★', worksCount: 106, rate: '$160/hr', template: { name: 'Active Motorized Spine Exosuit', features: ['Lordotic Lumbar Support Arc', 'Kinetic Load Sharing Shunts', 'Real-Time Vertebral Stress Sensing'] }, portfolio: ['https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop'] },
+      { id: 'bmt-5', name: 'Vespera Thorne', handle: '@vespera_thorne', spec: 'neural_sync', role: 'Bio-Telemetry & Firmware Architect', avatar: 'VT', color: '#be185d', desc: 'Flashing radiation-hardened firmware updates into cybernetic motor controllers and reflex compensators.', rating: '5.0★', worksCount: 134, rate: '$145/hr', template: { name: 'Radiation-Hardened Neural Firmware', features: ['Triple-Redundant Logic Bus', 'Sub-Zero Lubricant Viscosity Mod', 'Instant Reflex Arc Bypass'] }, portfolio: ['https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop'] },
+      { id: 'bmt-6', name: 'Ronan Cruz', handle: '@ronan_cruz', spec: 'prosthetics', role: 'EVA Combat & Heavy Rig Tuner', avatar: 'RC', color: '#ec4899', desc: 'Heavy industrial hydraulic arm retrofits capable of bending unshielded structural station beams.', rating: '4.7★', worksCount: 81, rate: '$155/hr', template: { name: 'Heavy Industrial Hydraulic Arm Rig', features: ['8000 PSI Synthetic Fluid Pump', 'Hardened Carbide Knuckle Shell', 'Tether Recoil Arrestor Lock'] }, portfolio: ['https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'quantum-data-courier',
+    name: 'Quantum Data Courier',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'cpu',
+    color: '#14b8a6',
+    shortDesc: 'Transporting secure information packets across interplanetary relays.',
+    features: [
+      'Entangled Qubit Cryogenic Storage Casks',
+      'FTL Laser Relay Mesh Protocol',
+      'Quantum Key Distribution (QKD) Handshakes',
+      'Tamper-Evident State Wavefunction Collapse'
+    ],
+    crystalColors: { top: 0x14b8a6, bottom: 0x0f766e },
+    sampleWorkers: [
+      { id: 'qdc-1', name: 'Kaelen Vane', handle: '@kaelen_vane', spec: 'qkd', role: 'Lead Quantum Key Courier', avatar: 'KV', color: '#14b8a6', desc: 'Secure transit of hardware-isolated entangled qubit registers between deep-space stations and lunar banks.', rating: '5.0★', worksCount: 162, rate: '$190/hr', template: { name: 'Hardware QKD Entanglement Vessel', features: ['Sub-Kelvin Magnetic Shielding', 'Wavefunction Collapse Detection', 'Zero-Decoherence Optical Chamber'] }, portfolio: ['https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop'] },
+      { id: 'qdc-2', name: 'Lyra Sterling', handle: '@lyra_sterling', spec: 'laser_relays', role: 'Deep-Space Laser Link Engineer', avatar: 'LS', color: '#2dd4bf', desc: 'Operating ultra-narrow collimated laser relays beaming petabyte payloads across asteroid belt distances.', rating: '4.9★', worksCount: 128, rate: '$165/hr', template: { name: 'Narrow-Beam Collimated Laser Mesh', features: ['Atmospheric Jitter Correction', 'Micron-Arcsecond Tracking Gimbal', 'Continuous Photonic Stream Sync'] }, portfolio: ['https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop'] },
+      { id: 'qdc-3', name: 'Zephyr Cruz', handle: '@zephyr_cruz', spec: 'encryption', role: 'Post-Quantum Cryptographic Sentry', avatar: 'ZC', color: '#0d9488', desc: 'Lattice-based cryptography implementation and quantum noise entropy harvesting for government-level manifests.', rating: '4.8★', worksCount: 94, rate: '$175/hr', template: { name: 'Lattice Post-Quantum Cryptographic Suite', features: ['NIST LWE Lattice Trapdoor', 'Cosmic Ray True-Random Seed', 'Ephemeral Key Self-Shredder'] }, portfolio: ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop'] },
+      { id: 'qdc-4', name: 'Soren Vale', handle: '@soren_vale', spec: 'qkd', role: 'Cold-Storage Qubit Vault Custodian', avatar: 'SV', color: '#14b8a6', desc: 'Guarding physical quantum memory drives aboard armored transit frigates with biometric deadman locks.', rating: '4.9★', worksCount: 114, rate: '$180/hr', template: { name: 'Biometric Deadman Qubit Vault', features: ['Pulse-Rate Cryptographic Lock', 'Instant Thermite Purge Core', 'Liquid Helium Active Circulator'] }, portfolio: ['https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop'] },
+      { id: 'qdc-5', name: 'Nyx Thorne', handle: '@nyx_thorne', spec: 'laser_relays', role: 'Orbital Repeater Relay Drone Pilot', avatar: 'NT', color: '#5eead4', desc: 'Deploying autonomous swarm microsatellite repeaters around gravitational lenses to circumvent solar occlusions.', rating: '5.0★', worksCount: 103, rate: '$150/hr', template: { name: 'Gravitational Lens Relay Constellation', features: ['Solar Corona Noise Filtering', 'Autonomous Station-Keeping RCS', 'Optical Buffer Memory Array'] }, portfolio: ['https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&auto=format&fit=crop'] },
+      { id: 'qdc-6', name: 'Orson Calder', handle: '@orson_calder', spec: 'encryption', role: 'Tachyon Packet Verification Analyst', avatar: 'OC', color: '#042f2e', desc: 'Auditing micro-temporal packets for causality anomalies and non-local entanglement verification.', rating: '4.7★', worksCount: 77, rate: '$160/hr', template: { name: 'Quantum Bell-State Verification Audit', features: ['CHSH Inequality Violation Probe', 'Interference Fringe Telemetry', 'Causality Chrono-Stamp Matrix'] }, portfolio: ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'stellar-cartographer',
+    name: 'Stellar Cartographer',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'globe',
+    color: '#eab308',
+    shortDesc: 'Mapping shifting gravitational anomalies and spatial distortion lanes.',
+    features: [
+      'Multi-Spectral Gravitational Wave Interferometry',
+      'Dynamic Warp Lane Topology Mapping',
+      'Accretion Disk Tidal Gradient Simulation',
+      '4D Spacetime Curvature Vector Charts'
+    ],
+    crystalColors: { top: 0xeab308, bottom: 0x854d0e },
+    sampleWorkers: [
+      { id: 'sc-1', name: 'Jaxen Vance', handle: '@jaxen_vance', spec: 'anomalies', role: 'Chief Gravitational Topographer', avatar: 'JV', color: '#eab308', desc: 'Mapping spatial curvature gradients, dark matter density pockets, and uncharted gravitational wormhole mouths.', rating: '5.0★', worksCount: 148, rate: '$170/hr', template: { name: '4D Spacetime Curvature Vector Chart', features: ['LIGO-Class Laser Interferometry', 'Metric Tensor Tensor Field Map', 'Tidal Horizon Safety Corridor'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop'] },
+      { id: 'sc-2', name: 'Tora Kross', handle: '@tora_kross', spec: 'warp_lanes', role: 'Hyperspace Transit Lane Surveyor', avatar: 'TK', color: '#facc15', desc: 'Surveying safe faster-than-light transit corridors clear of stray asteroids and relativistic rogue debris.', rating: '4.9★', worksCount: 119, rate: '$155/hr', template: { name: 'Hyper-Lane Debris-Free Transit Vector', features: ['Chronometer Relativity Sync', 'Mass Shadow Detection Scan', 'Safe Resonant Exit Points'] }, portfolio: ['https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop'] },
+      { id: 'sc-3', name: 'Vespera Drake', handle: '@vespera_drake', spec: 'spectral', role: 'Pulsar Timing Astrometrist', avatar: 'VD', color: '#ca8a04', desc: 'Utilizing millisecond pulsar beacons across the Orion Arm to establish absolute galactic positioning coordinates.', rating: '4.8★', worksCount: 88, rate: '$165/hr', template: { name: 'Millisecond Pulsar Coordinate Triad', features: ['X-Ray Pulse Phase Timing', 'Galactic Ephemeris Calibration', 'Zero-Reference Drift Calculator'] }, portfolio: ['https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop'] },
+      { id: 'sc-4', name: 'Cassian Sterling', handle: '@cassian_sterling', spec: 'anomalies', role: 'Black Hole Event Horizon Mapper', avatar: 'CS', color: '#eab308', desc: 'Calculating ergosphere frame-dragging boundaries and photon spheres around rotating Kerr black holes.', rating: '5.0★', worksCount: 126, rate: '$195/hr', template: { name: 'Kerr Metric Frame-Dragging Contour', features: ['Ergosphere Boundary Safe Margin', 'Hawking Radiation Background Scan', 'Relativistic Doppler Beaming Map'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop'] },
+      { id: 'sc-5', name: 'Mira Rooks', handle: '@mira_rooks', spec: 'warp_lanes', role: 'Nebular Navigational Scout', avatar: 'MR', color: '#fde047', desc: 'Charting navigable passages through dense ionized gas nebulae and intense stellar nursery electromagnetic radiation.', rating: '4.7★', worksCount: 95, rate: '$140/hr', template: { name: 'Ionized Nebula Flight Corridor', features: ['Faraday Rotation Radar Probe', 'Magnetic Induction Gradient Path', 'Stellar Flare Avoidance Timing'] }, portfolio: ['https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop'] },
+      { id: 'sc-6', name: 'Ronan Vance', handle: '@ronan_vance', spec: 'spectral', role: 'Cosmic Microwave Background Cartographer', avatar: 'RV', color: '#a16207', desc: 'Analyzing cosmic microwave variations to detect primordial gravitational ripples and spatial distortions.', rating: '4.9★', worksCount: 104, rate: '$150/hr', template: { name: 'CMB Anisotropy Deep Horizon Map', features: ['B-Mode Polarization Sensor', 'Cosmological Redshift Calibrate', 'Spatial Metric Expansion Factor'] }, portfolio: ['https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'vacuum-habitation-specialist',
+    name: 'Vacuum Habitation Specialist',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'shield',
+    color: '#6366f1',
+    shortDesc: 'Regulating artificial gravity grids, pressure seals, and life-support modules.',
+    features: [
+      'Atmospheric Partial-Pressure Gas Regulation',
+      'Hermetic Vacuum Seal Integrity Telemetry',
+      'ECLSS Closed-Cycle Water & Air Reclamation',
+      'Dual-Layer Cosmic Radiation Shielding Grids'
+    ],
+    crystalColors: { top: 0x6366f1, bottom: 0x3730a3 },
+    sampleWorkers: [
+      { id: 'vhs-1', name: 'Brantley Rooks', handle: '@brantley_rooks', spec: 'life_support', role: 'Chief Life Support Architect', avatar: 'BR', color: '#6366f1', desc: 'Directing ECLSS regeneration modules, ensuring continuous oxygen scrub and multi-stage potable water recycling.', rating: '5.0★', worksCount: 168, rate: '$155/hr', template: { name: 'ECLSS Closed-Cycle Regeneration Array', features: ['Sabatier Reaction Methanation', 'Electrochemical CO2 Concentration', 'Triple-Filter Catalytic Water Purifier'] }, portfolio: ['https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop'] },
+      { id: 'vhs-2', name: 'Thalia Sterling', handle: '@thalia_sterling', spec: 'pressure_seals', role: 'Airlock & Pressure Seal Engineer', avatar: 'TS', color: '#818cf8', desc: 'Calibrating multi-chamber explosive decompression airlock interlocks and composite magnetic silicone gaskets.', rating: '4.9★', worksCount: 132, rate: '$145/hr', template: { name: 'Hermetic Airlock Interlock Suite', features: ['Dual-Chamber Differential Barometer', 'Inflatable Elastomeric Seal Sealant', 'Zero-Loss Depressurization Vent'] }, portfolio: ['https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop'] },
+      { id: 'vhs-3', name: 'Krenshaw Drake', handle: '@krenshaw_drake', spec: 'radiation', role: 'Cosmic Radiation Shield Tech', avatar: 'KD', color: '#4f46e5', desc: 'Managing hydrogen-rich polyethylene shielding and active electromagnetic deflector fields during solar proton events.', rating: '4.8★', worksCount: 104, rate: '$160/hr', template: { name: 'Active Magnetic Radiation Deflector', features: ['Superconducting Helical Field Coil', 'Secondary Bremsstrahlung Absorber', 'Real-Time Sievert Dosage Sensor'] }, portfolio: ['https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop'] },
+      { id: 'vhs-4', name: 'Vora Kross', handle: '@vora_kross', spec: 'life_support', role: 'Atmospheric Gas Balance Chemist', avatar: 'VK', color: '#6366f1', desc: 'Precise regulation of 78/21 nitrogen-oxygen mixes, preventing nitrogen narcosis and oxygen toxicity in deep habitats.', rating: '4.9★', worksCount: 96, rate: '$140/hr', template: { name: 'Nitrogen-Oxygen Atmospheric Ratio Mixer', features: ['Paramagnetic O2 Telemetry', 'Trace Gas Hydrocarbon Filter', 'Automatic Fire-Suppression N2 Surge'] }, portfolio: ['https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop'] },
+      { id: 'vhs-5', name: 'Corbin Rooks', handle: '@corbin_rooks', spec: 'pressure_seals', role: 'Structural Pressure Hull Inspector', avatar: 'CR', color: '#a5b4fc', desc: 'Conducting laser shearography on carbon-titanium habitat pressure shells to detect sub-surface micro-fractures.', rating: '5.0★', worksCount: 122, rate: '$150/hr', template: { name: 'Laser Shearography Hull Diagnostic', features: ['Thermal Vacuum Vacuum Stress Test', 'Interferometric Flaw Identification', 'Micro-Crack Resin Capillary Seal'] }, portfolio: ['https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=400&auto=format&fit=crop'] },
+      { id: 'vhs-6', name: 'Taron Drake', handle: '@taron_drake', spec: 'radiation', role: 'Thermal Radiator Loop Specialist', avatar: 'TD', color: '#4338ca', desc: 'Regulating ammonia heat pipes and deployable titanium radiators dissipating heat into the absolute zero void.', rating: '4.7★', worksCount: 89, rate: '$135/hr', template: { name: 'Ammonia Heat Pipe Radiator Array', features: ['Dual-Loop Thermoelectric Pump', 'Micrometeoroid Armor Piping', 'Shade/Sun Thermal Cycling Balance'] }, portfolio: ['https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=400&auto=format&fit=crop'] }
+    ]
+  },
+  {
+    id: 'interstellar-archaeologist',
+    name: 'Interstellar Archaeologist',
+    category: 'space',
+    tag: 'Deep Space',
+    icon: 'compass',
+    color: '#d946ef',
+    shortDesc: 'Excavating ancient ruins left behind on rogue, tidally locked planets.',
+    features: [
+      'Sub-Surface Gravimetric Ground Penetration Radar',
+      'Precursor Relic Isotope Carbon-Chrono Dating',
+      'Quantum Laser Resonant Micro-Excavation',
+      'Extraterrestrial Glyph Linguistic Decryption'
+    ],
+    crystalColors: { top: 0xd946ef, bottom: 0x86198f },
+    sampleWorkers: [
+      { id: 'ia-1', name: 'Alistair Drake', handle: '@alistair_drake', spec: 'excavation', role: 'Chief Planetary Excavation Director', avatar: 'AD', color: '#d946ef', desc: 'Directing resonant ultrasonic excavation of cyclopean non-human structures on airless tidally locked worlds.', rating: '5.0★', worksCount: 156, rate: '$185/hr', template: { name: 'Resonant Ultrasonic Micro-Excavation', features: ['Zero-Shock Dust Evaporator', 'Sub-Millimeter Layer Stripper', 'Sub-Zero Cryo-Preservation Field'] }, portfolio: ['https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop'] },
+      { id: 'ia-2', name: 'Corina Sterling', handle: '@corina_sterling', spec: 'linguistics', role: 'Xeno-Linguistic Cryptanalyst', avatar: 'CS', color: '#f0abfc', desc: 'Deciphering non-linear multidimensional glyphs etched into high-density crystalline stelae.', rating: '4.9★', worksCount: 122, rate: '$175/hr', template: { name: 'Multidimensional Glyph Neural Decryption', features: ['Mathematical Invariant Phoneme Tree', 'Topological Syntax Mapper', 'Semantic Resonance Alignment'] }, portfolio: ['https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop'] },
+      { id: 'ia-3', name: 'Darius Rooks', handle: '@darius_rooks', spec: 'radar', role: 'Gravimetric Sub-Surface Surveyor', avatar: 'DR', color: '#c026d3', desc: 'Utilizing muon and gravimetric ground-penetrating tomography to map subterranean catacombs 3 km below frozen crusts.', rating: '4.8★', worksCount: 97, rate: '$165/hr', template: { name: 'Sub-Surface Muon Tomography Array', features: ['Deep Bedrock Permeation Scan', 'Density Anomaly Void Locator', '3D Volumetric Cavern Reconstruction'] }, portfolio: ['https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop'] },
+      { id: 'ia-4', name: 'Selene Kross', handle: '@selene_kross', spec: 'excavation', role: 'Ancient Relic Conservator', avatar: 'SK', color: '#e879f9', desc: 'Stasis field encapsulation of volatile exotic matter artifacts and dormant precursor power matrices.', rating: '5.0★', worksCount: 110, rate: '$190/hr', template: { name: 'Exotic Matter Stasis Field Lock', features: ['Temporal Decay Neutralizer', 'Vacuum Ambient Encasement', 'Antimatter Anti-Decoherence Barrier'] }, portfolio: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop'] },
+      { id: 'ia-5', name: 'Kaelen Drake', handle: '@kaelen_drake', spec: 'radar', role: 'Chronological Isotope Geochemist', avatar: 'KD', color: '#d946ef', desc: 'Determining exact cosmic epochs of ancient construction through cosmic-ray exposure dating of extraterrestrial alloys.', rating: '4.7★', worksCount: 84, rate: '$150/hr', template: { name: 'Cosmic Ray Exposure Isotope Chronology', features: ['Argon-40 / Argon-39 Laser Probe', 'Lead-Uranium Decay Isochron', 'GCR Spallation Product Metric'] }, portfolio: ['https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop'] },
+      { id: 'ia-6', name: 'Tahlia Sterling', handle: '@tahlia_sterling', spec: 'linguistics', role: 'Precursor Energy Matrix Reverse-Engineer', avatar: 'TS', color: '#a21caf', desc: 'Tracing dormant crystalline energy transmission conduits and optical power hubs in prehistoric megastructures.', rating: '4.9★', worksCount: 135, rate: '$170/hr', template: { name: 'Crystalline Energy Conduit Diagnostics', features: ['Opto-Acoustic Resonant Probe', 'Sub-Threshold Current Injection', 'Harmonic Lattice Activation Map'] }, portfolio: ['https://images.unsplash.com/photo-1507499739999-097706ad8914?w=400&auto=format&fit=crop', 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&auto=format&fit=crop'] }
+    ]
   }
 ];
 
@@ -2270,7 +2510,7 @@ Creator Forge Platform Architecture:
 - Co-Architectural Tool: Antigravity (Google DeepMind).
 - Visual Identity: Neo-Brutalism + Glassmorphism on a pitch-black void. Reactive 140+ particle constellation starfield.
 - Interactive Features:
-  1. Gateway Matrix Layer (#gateway): The primary entry screen with 3D flip cards and chromatic radar pulse halos spanning 8 major profession categories:
+  1. Gateway Matrix Layer (#gateway): The primary entry screen with 3D flip cards and chromatic radar pulse halos spanning 18 major profession categories across planetary and deep-space disciplines:
      - Plumbers & Fluid Techs (Certified hydro-jetting, thermal acoustic leak detection, trenchless relining)
      - 3D Animators & Riggers (AAA FACS muscle rigging, Niagara volumetric particles, 60 FPS Blender/Unreal pipelines)
      - Electricians & Smart Grid (200A/400A panel upgrades, FLIR infrared circuit audits, EV stations)
@@ -2279,6 +2519,16 @@ Creator Forge Platform Architecture:
      - Automotive & EV Mechanics (CAN bus diagnostics, hybrid high-voltage battery cell balancing)
      - Legal Counsel & Tech IP (Synthetic media licensing, commercial IP buyouts, venture contracts)
      - Healthcare & Sports Physio (Biomechanical motion analysis, neuromuscular rehab)
+     - Zero-G Botanist (Floating flora cultivation, low-G hydroponic biospheres, radiation-proof flora)
+     - Kinetic Drift Pilot (Asteroid belt transit, zero-G slipstream navigation, relativistic vectoring)
+     - Orbital Welder (Electron beam vacuum fusion, cryogenic hull plating, micrometeoroid patching)
+     - Atmospheric Scavenger (Gas giant Helium-3 and deuterium harvesting, plasma scoop induction)
+     - Gravity Harness Engineer (Anti-gravity repulsor calibration, sub-millisecond inertial dampening)
+     - Bio-Mechanic Tuner (Zero-G cybernetic limb osseointegration, neural-sync latency zeroing)
+     - Quantum Data Courier (Entangled qubit cryogenic transit, QKD handshakes, FTL laser relays)
+     - Stellar Cartographer (Gravitational wave interferometry, warp lane topology, CMB distortion maps)
+     - Vacuum Habitation Specialist (Artificial gravity grids, hermetic airlocks, ECLSS life support)
+     - Interstellar Archaeologist (Tidally locked planet excavations, precursor relic isotope dating)
   2. 3D Crystal Core Hub (#hub): Centerpiece rotating WebGL crystal rendered via Three.js with dual point lights (top & bottom) that dynamically re-tint to match the active profession's neon color code!
   3. Circular Meniscus: 360° circular SVG ring with dynamic cursor-facing quadratic Béziers tracking the mouse.
   4. 24 Verified Specialists Directory (#homepage): Search, filter by specialty, inspect rates, rating, signature workflow templates, and click avatars to open high-res images in a glowing bubble lightbox.
