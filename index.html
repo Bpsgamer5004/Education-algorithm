@@ -822,6 +822,84 @@
     </div>
   </div>
 
+  <!-- =========================================================
+       AETHERBOT: PERSISTENT AI ASSISTANT WIDGET
+       ========================================================= -->
+  <div id="aetherbot-widget" class="aetherbot-root">
+    <!-- Comic Dialogue Bubble ("Hey there!") -->
+    <div id="aetherbot-speech-bubble" class="aetherbot-speech-bubble">
+      <span class="speech-bubble-text">Hey there! 💬</span>
+      <div class="speech-tail-outer"></div>
+      <div class="speech-tail-inner"></div>
+    </div>
+
+    <!-- Chat Window Panel -->
+    <div id="aetherbot-chat-panel" class="aetherbot-panel" style="display: none;">
+      <!-- Header -->
+      <div class="aetherbot-panel-header">
+        <div class="aetherbot-header-left">
+          <div class="aetherbot-avatar-badge">
+            <img src="https://api.dicebear.com/10.x/identicon/svg?backgroundColor=101216&rowColor=ff2e88,00e5ff,ffe600,7cff00,ff6a00,b400ff&scale=0.78&borderRadius=37&seed=Felix" alt="AetherBot" class="pixel-avatar" />
+          </div>
+          <div class="aetherbot-header-meta">
+            <div class="aetherbot-name-row">
+              <span class="aetherbot-title">AETHERBOT</span>
+              <span class="aetherbot-model-chip">NVIDIA NIM</span>
+            </div>
+            <span class="aetherbot-subtitle">CREATOR FORGE SENTINEL</span>
+          </div>
+        </div>
+        <div class="aetherbot-header-actions">
+          <button id="btn-aetherbot-clear" class="aetherbot-btn-icon" title="Clear Buffer"><i data-lucide="rotate-ccw"></i></button>
+          <button id="btn-aetherbot-close" class="aetherbot-btn-icon aetherbot-btn-close" title="Close"><i data-lucide="x"></i></button>
+        </div>
+      </div>
+
+      <!-- Quick Prompts Row -->
+      <div class="aetherbot-quick-chips">
+        <span class="quick-chip-label"><i data-lucide="sparkles"></i> Prompt:</span>
+        <button class="quick-chip-btn" data-query="How does the 3D crystal core change colors?">Crystal Core</button>
+        <button class="quick-chip-btn" data-query="Who is B. Pawan Sai and what tools were used?">Architect & Antigravity</button>
+        <button class="quick-chip-btn" data-query="How do I inspect plumbers, animators, and trades?">Profession Matrix</button>
+      </div>
+
+      <!-- Messages Stream -->
+      <div id="aetherbot-messages" class="aetherbot-messages-container">
+        <!-- Welcome Message -->
+        <div class="aetherbot-msg aetherbot-msg-bot">
+          <div class="aetherbot-msg-avatar">
+            <img src="https://api.dicebear.com/10.x/identicon/svg?backgroundColor=101216&rowColor=ff2e88,00e5ff,ffe600,7cff00,ff6a00,b400ff&scale=0.78&borderRadius=37&seed=Felix" alt="AetherBot" class="pixel-avatar" />
+          </div>
+          <div class="aetherbot-bubble">
+            <div class="msg-text">Greetings! I am **AetherBot**, your AI Sentinel for Creator Forge. Ask me about the 3D crystal core, the universal profession matrix, or navigating the platform!</div>
+            <span class="msg-time">Online</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Bar -->
+      <form id="aetherbot-input-form" class="aetherbot-input-form">
+        <input type="text" id="aetherbot-input" class="aetherbot-text-input" placeholder="Ask AetherBot about Creator Forge..." autocomplete="off" />
+        <button type="submit" id="aetherbot-btn-send" class="aetherbot-send-btn" title="Send message">
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Floating Trigger Button (4-Bit Pixel Avatar) -->
+    <button id="aetherbot-trigger-btn" class="aetherbot-trigger" aria-label="Toggle AetherBot Assistant">
+      <div class="aetherbot-trigger-inner" id="aetherbot-trigger-avatar-wrap">
+        <img src="https://api.dicebear.com/10.x/identicon/svg?backgroundColor=101216&rowColor=ff2e88,00e5ff,ffe600,7cff00,ff6a00,b400ff&scale=0.78&borderRadius=37&seed=Felix" alt="AetherBot Avatar" class="pixel-avatar-lg" />
+        <span class="aetherbot-online-dot"></span>
+      </div>
+      <div class="aetherbot-close-icon" id="aetherbot-trigger-close-icon" style="display: none; color: #000;">
+        <i data-lucide="chevron-down" style="width: 28px; height: 28px; stroke-width: 3;"></i>
+      </div>
+    </button>
+  </div>
+
+  <!-- Supabase JS Client via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js"></script>
 </body>
 </html>

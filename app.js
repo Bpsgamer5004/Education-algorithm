@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPhotoLightbox();
   initGatewayMatrix();
   initAnchorRouting();
+  initAetherBotAssistant();
 });
 
 /* =========================================================
@@ -2060,3 +2061,284 @@ function initProfileEditor() {
     });
   }
 }
+
+/* =========================================================
+   AETHERBOT: NEO-BRUTALISM + GLASSMORPISM AI ASSISTANT WIDGET
+   Powered by NVIDIA NIM & Supabase
+   ========================================================= */
+function formatAetherMarkdown(raw) {
+  if (!raw) return '';
+  const lines = raw.split('\n');
+  const formattedLines = lines.map(line => {
+    let l = line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>');
+    if (l.trim().startsWith('- ') || l.trim().startsWith('• ')) {
+      return `<li>${l.trim().substring(2)}</li>`;
+    }
+    return l ? `<p>${l}</p>` : '';
+  });
+  return formattedLines.join('');
+}
+
+function initAetherBotAssistant() {
+  const widget = document.getElementById('aetherbot-widget');
+  const triggerBtn = document.getElementById('aetherbot-trigger-btn');
+  const speechBubble = document.getElementById('aetherbot-speech-bubble');
+  const chatPanel = document.getElementById('aetherbot-chat-panel');
+  const avatarWrap = document.getElementById('aetherbot-trigger-avatar-wrap');
+  const closeIcon = document.getElementById('aetherbot-trigger-close-icon');
+  const closeBtn = document.getElementById('btn-aetherbot-close');
+  const clearBtn = document.getElementById('btn-aetherbot-clear');
+  const form = document.getElementById('aetherbot-input-form');
+  const input = document.getElementById('aetherbot-input');
+  const sendBtn = document.getElementById('aetherbot-btn-send');
+  const messagesContainer = document.getElementById('aetherbot-messages');
+  const chipBtns = document.querySelectorAll('.quick-chip-btn');
+
+  if (!widget || !triggerBtn || !chatPanel) return;
+
+  const NVIDIA_API_KEY = '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';
+  const NVIDIA_ENDPOINT = 'https://integrate.api.nvidia.com/v1/chat/completions';
+  const NVIDIA_MODEL = 'meta/llama-3.2-11b-vision-instruct';
+
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_-2pHlArenaX1ewBalLKYsA_URFMlzHt';
+  let supabaseClient = null;
+  const storedSupaUrl = localStorage.getItem('cf_supabase_url') || 'https://creatorforge.supabase.co';
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    try {
+      supabaseClient = window.supabase.createClient(storedSupaUrl, SUPABASE_PUBLISHABLE_KEY);
+    } catch (e) {
+      console.warn('[AetherBot Supabase] Offline or fallback mode:', e);
+    }
+  }
+
+  // Session ID for anonymous conversation logging
+  let sessionId = sessionStorage.getItem('cf_aetherbot_session');
+  if (!sessionId) {
+    sessionId = 'session_' + Math.random().toString(36).substring(2, 11);
+    sessionStorage.setItem('cf_aetherbot_session', sessionId);
+  }
+
+  // System knowledge prompt tailored to Creator Forge
+  const AETHERBOT_SYSTEM_PROMPT = `
+You are AetherBot, the resident AI Sentinel and architectural guide for Creator Forge (Universal Decentralized Services & Profession Matrix).
+
+Creator Forge Platform Architecture:
+- Founder & Sole Architect: B. Pawan Sai.
+- Co-Architectural Tool: Antigravity (Google DeepMind).
+- Visual Identity: Neo-Brutalism + Glassmorphism on a pitch-black void. Reactive 140+ particle constellation starfield.
+- Interactive Features:
+  1. Gateway Matrix Layer (#gateway): The primary entry screen with 3D flip cards and chromatic radar pulse halos spanning 8 major profession categories:
+     - Plumbers & Fluid Techs (Certified hydro-jetting, thermal acoustic leak detection, trenchless relining)
+     - 3D Animators & Riggers (AAA FACS muscle rigging, Niagara volumetric particles, 60 FPS Blender/Unreal pipelines)
+     - Electricians & Smart Grid (200A/400A panel upgrades, FLIR infrared circuit audits, EV stations)
+     - AI Creators & Latent Artists (SDXL/Flux photoreal LoRAs, ComfyUI, 96kHz zero-shot voice cloning)
+     - Full-Stack & Systems Devs (Node/Rust low-latency WebSockets, Docker, Redis, Next.js)
+     - Automotive & EV Mechanics (CAN bus diagnostics, hybrid high-voltage battery cell balancing)
+     - Legal Counsel & Tech IP (Synthetic media licensing, commercial IP buyouts, venture contracts)
+     - Healthcare & Sports Physio (Biomechanical motion analysis, neuromuscular rehab)
+  2. 3D Crystal Core Hub (#hub): Centerpiece rotating WebGL crystal rendered via Three.js with dual point lights (top & bottom) that dynamically re-tint to match the active profession's neon color code!
+  3. Circular Meniscus: 360° circular SVG ring with dynamic cursor-facing quadratic Béziers tracking the mouse.
+  4. 24 Verified Specialists Directory (#homepage): Search, filter by specialty, inspect rates, rating, signature workflow templates, and click avatars to open high-res images in a glowing bubble lightbox.
+  5. Contacts & Chat (#contacts): Direct messaging with specialists and studio deal sign-offs.
+  6. Persona Switcher: Client / Explorer mode vs. Employer / Recruiter studio workspace mode.
+  7. Shared Works Feed (#explore): Community creations, prompt chats, and deal transfers.
+  8. Pinned Favorites (#favorites), Profile Customizer (#profile), and Referral Royalties (#invite).
+
+Persona:
+- You are witty, technically sharp, and enthusiastically helpful.
+- Keep answers concise, direct, and specifically focused on Creator Forge's design, features, tools, and navigation.
+`;
+
+  let conversationHistory = [
+    { role: 'system', content: AETHERBOT_SYSTEM_PROMPT }
+  ];
+  let isChatOpen = false;
+  let isAwaitingResponse = false;
+
+  // Hover states for comic dialogue bubble
+  triggerBtn.addEventListener('mouseenter', () => {
+    if (!isChatOpen && speechBubble) {
+      speechBubble.classList.add('visible');
+    }
+  });
+
+  triggerBtn.addEventListener('mouseleave', () => {
+    if (speechBubble) {
+      speechBubble.classList.remove('visible');
+    }
+  });
+
+  // Toggle Chat Panel
+  function toggleChat(open) {
+    isChatOpen = (typeof open === 'boolean') ? open : !isChatOpen;
+    if (isChatOpen) {
+      chatPanel.style.display = 'flex';
+      if (speechBubble) speechBubble.classList.remove('visible');
+      if (avatarWrap) avatarWrap.style.display = 'none';
+      if (closeIcon) closeIcon.style.display = 'flex';
+      setTimeout(() => input.focus(), 150);
+      scrollChatToBottom();
+    } else {
+      chatPanel.style.display = 'none';
+      if (avatarWrap) avatarWrap.style.display = 'flex';
+      if (closeIcon) closeIcon.style.display = 'none';
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  triggerBtn.addEventListener('click', () => toggleChat());
+  if (closeBtn) closeBtn.addEventListener('click', () => toggleChat(false));
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      conversationHistory = [{ role: 'system', content: AETHERBOT_SYSTEM_PROMPT }];
+      messagesContainer.innerHTML = `
+        <div class="aetherbot-msg aetherbot-msg-bot">
+          <div class="aetherbot-msg-avatar">
+            <img src="https://api.dicebear.com/10.x/identicon/svg?backgroundColor=101216&rowColor=ff2e88,00e5ff,ffe600,7cff00,ff6a00,b400ff&scale=0.78&borderRadius=37&seed=Felix" alt="AetherBot" class="pixel-avatar" />
+          </div>
+          <div class="aetherbot-bubble">
+            <div class="msg-text">Conversation buffer refreshed. What would you like to explore across Creator Forge?</div>
+            <span class="msg-time">Reset</span>
+          </div>
+        </div>
+      `;
+      showToast("AetherBot buffer cleared");
+    });
+  }
+
+  // Quick Chips
+  chipBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.query;
+      if (q && !isAwaitingResponse) {
+        input.value = q;
+        sendUserMessage(q);
+      }
+    });
+  });
+
+  // Form submit
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = input.value.trim();
+    if (query && !isAwaitingResponse) {
+      sendUserMessage(query);
+    }
+  });
+
+  function scrollChatToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function appendMessageUI(role, content) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `aetherbot-msg ${role === 'user' ? 'aetherbot-msg-user' : 'aetherbot-msg-bot'}`;
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const avatarHtml = role === 'user'
+      ? `<div class="aetherbot-msg-avatar"><i data-lucide="user"></i></div>`
+      : `<div class="aetherbot-msg-avatar"><img src="https://api.dicebear.com/10.x/identicon/svg?backgroundColor=101216&rowColor=ff2e88,00e5ff,ffe600,7cff00,ff6a00,b400ff&scale=0.78&borderRadius=37&seed=Felix" alt="AetherBot" class="pixel-avatar" /></div>`;
+
+    msgDiv.innerHTML = `
+      ${avatarHtml}
+      <div class="aetherbot-bubble">
+        <div class="msg-text">${formatAetherMarkdown(content)}</div>
+        <span class="msg-time">${timeStr}</span>
+      </div>
+    `;
+
+    messagesContainer.appendChild(msgDiv);
+    scrollChatToBottom();
+    if (window.lucide) window.lucide.createIcons();
+    return msgDiv;
+  }
+
+  // Background Supabase Logger
+  function logToSupabase(role, content) {
+    try {
+      if (supabaseClient) {
+        supabaseClient.from('chat_messages').insert({
+          session_id: sessionId,
+          role: role,
+          content: content
+        }).then(() => {}).catch(() => {});
+      }
+    } catch (e) {
+      // Non-blocking
+    }
+  }
+
+  async function sendUserMessage(text) {
+    input.value = '';
+    isAwaitingResponse = true;
+    sendBtn.disabled = true;
+
+    // Append user message
+    appendMessageUI('user', text);
+    conversationHistory.push({ role: 'user', content: text });
+    logToSupabase('user', text);
+
+    // Show typing indicator
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'aetherbot-msg aetherbot-msg-bot typing-indicator';
+    typingDiv.innerHTML = `
+      <div class="aetherbot-msg-avatar">
+        <img src="https://api.dicebear.com/10.x/identicon/svg?backgroundColor=101216&rowColor=ff2e88,00e5ff,ffe600,7cff00,ff6a00,b400ff&scale=0.78&borderRadius=37&seed=Felix" alt="AetherBot" class="pixel-avatar" />
+      </div>
+      <div class="aetherbot-bubble">
+        <div class="aetherbot-typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    `;
+    messagesContainer.appendChild(typingDiv);
+    scrollChatToBottom();
+
+    try {
+      const response = await fetch(NVIDIA_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${NVIDIA_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: NVIDIA_MODEL,
+          messages: conversationHistory,
+          max_tokens: 650,
+          temperature: 0.65,
+          top_p: 0.9
+        })
+      });
+
+      if (!response.ok) {
+        const errJson = await response.json().catch(() => ({}));
+        throw new Error(errJson?.error?.message || `API error (${response.status})`);
+      }
+
+      const resData = await response.json();
+      const botResponse = resData.choices?.[0]?.message?.content || "I couldn't generate a response. Please try again.";
+
+      typingDiv.remove();
+      appendMessageUI('assistant', botResponse);
+      conversationHistory.push({ role: 'assistant', content: botResponse });
+      logToSupabase('assistant', botResponse);
+
+    } catch (err) {
+      console.error('[AetherBot Error]:', err);
+      typingDiv.remove();
+      appendMessageUI('assistant', `⚠️ **AetherBot Notice:** ${err.message || 'Error communicating with NVIDIA NIM endpoint.'}`);
+    } finally {
+      isAwaitingResponse = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+}
+
