@@ -656,16 +656,29 @@ body[data-mode="recruiter"] .mode-pulse {
   font-size: clamp(2.2rem, 5vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.1;
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  line-height: 1.15;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 }
 
-.text-neon-cyan {
+.gateway-word-wrap {
+  display: inline-flex;
+  flex-wrap: nowrap;
+}
+
+.gateway-word-accent .gateway-char {
   color: #06b6d4;
-  text-shadow: 0 0 35px rgba(6, 182, 212, 0.6);
+  text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+}
+
+/* Per-character ripple spans — identical mechanics to .title-char */
+.gateway-char {
+  display: inline-block;
+  transition: color 0.12s ease, transform 0.12s ease, text-shadow 0.12s ease;
+  will-change: transform, color;
+  cursor: default;
 }
 
 .gateway-subtitle {
@@ -673,6 +686,195 @@ body[data-mode="recruiter"] .mode-pulse {
   font-size: 1rem;
   color: #94a3b8;
   line-height: 1.6;
+}
+
+/* =========================================================
+   HUB BACK BUTTON (top-left, subtle animated)
+   ========================================================= */
+.hub-back-btn {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 8px 14px 8px 10px;
+  cursor: pointer;
+  color: #e2e8f0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  outline: none;
+}
+
+.hub-back-btn:hover {
+  border-color: rgba(163, 230, 53, 0.6);
+  box-shadow: 0 4px 32px rgba(163, 230, 53, 0.2), 0 0 0 1px rgba(163, 230, 53, 0.3);
+  color: #a3e635;
+  transform: translateX(-2px);
+}
+
+.hub-back-btn:active {
+  transform: translateX(1px) scale(0.97);
+}
+
+.hub-back-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(163, 230, 53, 0.12);
+  border: 1px solid rgba(163, 230, 53, 0.3);
+  transition: background 0.25s ease, transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.hub-back-arrow i { width: 13px; height: 13px; stroke-width: 2.8; color: #a3e635; }
+
+.hub-back-btn:hover .hub-back-arrow {
+  background: rgba(163, 230, 53, 0.22);
+  transform: translateX(-2px);
+}
+
+.hub-back-label {
+  white-space: nowrap;
+}
+
+.hub-back-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at left center, rgba(163, 230, 53, 0.08) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hub-back-btn:hover .hub-back-glow {
+  opacity: 1;
+}
+
+/* Idle pulse animation for the back button */
+@keyframes hubBackPulse {
+  0%, 100% { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 0px rgba(163, 230, 53, 0.15); }
+  50% { box-shadow: 0 4px 28px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(163, 230, 53, 0.08); }
+}
+
+.hub-back-btn {
+  animation: hubBackPulse 3.5s infinite;
+}
+
+/* =========================================================
+   RETRO PIXEL SPEAKER (AI talking animation)
+   ========================================================= */
+.aetherbot-pixel-speaker {
+  background: rgba(5, 5, 10, 0.9);
+  border-top: 2px solid rgba(163, 230, 53, 0.3);
+  padding: 8px 14px;
+  animation: pixelSpeakerIn 0.2s ease;
+}
+
+@keyframes pixelSpeakerIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pixel-speaker-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pixel-char-body {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.pixel-char-svg {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  animation: pixelCharBob 0.5s steps(2) infinite;
+  filter: drop-shadow(0 0 6px rgba(163, 230, 53, 0.5));
+}
+
+@keyframes pixelCharBob {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+/* Mouth toggle animation — done in JS by toggling pixel-is-talking class */
+.aetherbot-pixel-speaker .pixel-char-svg.pixel-is-talking .pixel-mouth-closed {
+  display: none;
+}
+.aetherbot-pixel-speaker .pixel-char-svg.pixel-is-talking .pixel-mouth-open {
+  display: inline !important;
+}
+
+.pixel-speaker-text {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #a3e635;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.pixel-speaker-ellipsis span {
+  display: inline-block;
+  animation: ellipsisFade 1.2s infinite;
+  opacity: 0;
+}
+.pixel-speaker-ellipsis span:nth-child(1) { animation-delay: 0s; }
+.pixel-speaker-ellipsis span:nth-child(2) { animation-delay: 0.3s; }
+.pixel-speaker-ellipsis span:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes ellipsisFade {
+  0%, 100% { opacity: 0; }
+  40%, 60% { opacity: 1; }
+}
+
+/* Mini audio equaliser bars */
+.pixel-audio-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+  margin-left: auto;
+}
+
+.pbar {
+  display: inline-block;
+  width: 3px;
+  background: #06b6d4;
+  border-radius: 1px;
+  animation: audioBar 0.6s ease infinite alternate;
+}
+
+.pbar:nth-child(1) { height: 30%; animation-delay: 0s;    background: #ff2e88; }
+.pbar:nth-child(2) { height: 75%; animation-delay: 0.1s;  background: #00e5ff; }
+.pbar:nth-child(3) { height: 50%; animation-delay: 0.2s;  background: #ffe600; }
+.pbar:nth-child(4) { height: 90%; animation-delay: 0.15s; background: #7cff00; }
+.pbar:nth-child(5) { height: 40%; animation-delay: 0.05s; background: #b400ff; }
+
+@keyframes audioBar {
+  from { transform: scaleY(0.3); opacity: 0.6; }
+  to   { transform: scaleY(1);   opacity: 1; }
 }
 
 .gateway-filter-bar {

@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initInteractiveStarfield();
   initRippleTitle();
+  initRippleGatewayTitle();
   initModeSwitcher();
   initSelfBuildingCrystal();
   initCircularMeniscusWithMouseFacingCurve();
@@ -25,6 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initGatewayMatrix();
   initAnchorRouting();
   initAetherBotAssistant();
+
+  // Hub back-to-gateway button
+  const hubBackBtn = document.getElementById('btn-hub-back-to-gateway');
+  if (hubBackBtn) {
+    hubBackBtn.addEventListener('click', () => {
+      window.location.hash = '#gateway';
+    });
+  }
 });
 
 /* =========================================================
@@ -334,6 +343,10 @@ function warpTo(targetId) {
     if (targetId === 'gateway') gateway.classList.add('active');
     else gateway.classList.remove('active');
   }
+
+  // Show back-to-gateway button only on hub
+  const hubBackBtn = document.getElementById('btn-hub-back-to-gateway');
+  if (hubBackBtn) hubBackBtn.style.display = (targetId === 'hub') ? 'flex' : 'none';
 
   // Activate target
   if (targetId === 'gateway') {
@@ -665,6 +678,59 @@ function initRippleTitle() {
         span.style.color = '#ffffff';
         span.style.transform = 'translateY(0px) scale(1)';
         span.style.textShadow = '0 10px 40px rgba(0, 0, 0, 0.9)';
+      }
+    });
+  });
+}
+
+/* =========================================================
+   3b. GATEWAY TITLE RIPPLE — same mechanic as hub title
+   ========================================================= */
+function initRippleGatewayTitle() {
+  const title = document.getElementById('gateway-ripple-title');
+  if (!title) return;
+
+  const chars = title.querySelectorAll('.gateway-char');
+  const rippleRadius = 150;
+  // Pull from the profession neon palette for richer colour variety
+  const rippleColors = ['#06b6d4', '#a3e635', '#f43f5e', '#a855f7', '#f59e0b', '#34d399', '#ff2e88', '#00e5ff'];
+
+  // Default colour state: "CHOOSE YOUR" = white, "PROFESSION" = cyan
+  function resetChar(span) {
+    const isAccent = span.closest('.gateway-word-accent');
+    if (isAccent) {
+      span.style.color = '#06b6d4';
+      span.style.textShadow = '0 0 20px rgba(6, 182, 212, 0.4)';
+    } else {
+      span.style.color = '#ffffff';
+      span.style.textShadow = 'none';
+    }
+    span.style.transform = 'translateY(0px) scale(1)';
+  }
+
+  chars.forEach(span => resetChar(span));
+
+  window.addEventListener('mousemove', (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    chars.forEach((span, idx) => {
+      const rect = span.getBoundingClientRect();
+      const charCenterX = rect.left + rect.width / 2;
+      const charCenterY = rect.top + rect.height / 2;
+
+      const dx = mouseX - charCenterX;
+      const dy = mouseY - charCenterY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < rippleRadius) {
+        const factor = 1 - (dist / rippleRadius);
+        const col = rippleColors[(idx + Math.floor(performance.now() * 0.003)) % rippleColors.length];
+        span.style.color = col;
+        span.style.transform = `translateY(${-7 * factor}px) scale(${1 + 0.18 * factor})`;
+        span.style.textShadow = `0 0 ${20 * factor}px ${col}, 0 0 ${40 * factor}px ${col}66`;
+      } else {
+        resetChar(span);
       }
     });
   });
@@ -2106,14 +2172,23 @@ function initAetherBotAssistant() {
   const NVIDIA_ENDPOINT = 'https://integrate.api.nvidia.com/v1/chat/completions';
   const NVIDIA_MODEL = 'meta/llama-3.2-11b-vision-instruct';
 
-  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_-2pHlArenaX1ewBalLKYsA_URFMlzHt';
+  // Supabase — only initialise if a valid project URL has been stored
+  // (avoids crash from placeholder URL which breaks the entire widget)
   let supabaseClient = null;
-  const storedSupaUrl = localStorage.getItem('cf_supabase_url') || 'https://creatorforge.supabase.co';
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
+  const storedSupaUrl = localStorage.getItem('cf_supabase_url') || '';
+  if (
+    storedSupaUrl &&
+    storedSupaUrl.includes('supabase.co') &&
+    window.supabase &&
+    typeof window.supabase.createClient === 'function'
+  ) {
     try {
-      supabaseClient = window.supabase.createClient(storedSupaUrl, SUPABASE_PUBLISHABLE_KEY);
+      supabaseClient = window.supabase.createClient(
+        storedSupaUrl,
+        'sb_publishable_-2pHlArenaX1ewBalLKYsA_URFMlzHt'
+      );
     } catch (e) {
-      console.warn('[AetherBot Supabase] Offline or fallback mode:', e);
+      console.warn('[AetherBot Supabase] Init failed silently:', e);
     }
   }
 
@@ -2285,6 +2360,29 @@ Persona:
     conversationHistory.push({ role: 'user', content: text });
     logToSupabase('user', text);
 
+    // ── Pixel Speaker: show & start mouth animation ───────────────────────
+    const pixelSpeaker  = document.getElementById('aetherbot-pixel-speaker');
+    const pixelSvg      = pixelSpeaker?.querySelector('.pixel-char-svg');
+    const speakerStatus = document.getElementById('pixel-speaker-status');
+
+    if (pixelSpeaker) pixelSpeaker.style.display = 'flex';
+    if (speakerStatus) speakerStatus.textContent  = 'AetherBot is thinking…';
+
+    // Start mouth-toggle interval (~300 ms feels natural for speech)
+    let mouthInterval = null;
+    let mouthOpen = false;
+    if (pixelSvg) {
+      mouthInterval = setInterval(() => {
+        mouthOpen = !mouthOpen;
+        if (mouthOpen) {
+          pixelSvg.classList.add('pixel-is-talking');
+        } else {
+          pixelSvg.classList.remove('pixel-is-talking');
+        }
+      }, 300);
+    }
+    // ─────────────────────────────────────────────────────────────────────
+
     // Show typing indicator
     const typingDiv = document.createElement('div');
     typingDiv.className = 'aetherbot-msg aetherbot-msg-bot typing-indicator';
@@ -2302,6 +2400,9 @@ Persona:
     scrollChatToBottom();
 
     try {
+      // Update status text once the request is actually flying
+      if (speakerStatus) speakerStatus.textContent = 'AetherBot is speaking…';
+
       const response = await fetch(NVIDIA_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -2335,6 +2436,12 @@ Persona:
       typingDiv.remove();
       appendMessageUI('assistant', `⚠️ **AetherBot Notice:** ${err.message || 'Error communicating with NVIDIA NIM endpoint.'}`);
     } finally {
+      // ── Pixel Speaker: stop & hide ────────────────────────────────────
+      if (mouthInterval) clearInterval(mouthInterval);
+      if (pixelSvg) pixelSvg.classList.remove('pixel-is-talking');
+      if (pixelSpeaker) pixelSpeaker.style.display = 'none';
+      // ─────────────────────────────────────────────────────────────────
+
       isAwaitingResponse = false;
       sendBtn.disabled = false;
       input.focus();

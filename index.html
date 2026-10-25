@@ -72,9 +72,10 @@
           <span class="pulse-bead"></span>
           <span>UNIVERSAL PROFESSION MATRIX &bull; ARCHITECT: B. PAWAN SAI</span>
         </div>
-        <h1 class="gateway-title">
-          <span>CHOOSE YOUR</span>
-          <span class="text-neon-cyan">PROFESSION</span>
+        <h1 class="gateway-title" id="gateway-ripple-title">
+          <span class="gateway-word-wrap"><span class="gateway-char">C</span><span class="gateway-char">H</span><span class="gateway-char">O</span><span class="gateway-char">O</span><span class="gateway-char">S</span><span class="gateway-char">E</span><span class="gateway-char">&nbsp;</span><span class="gateway-char">Y</span><span class="gateway-char">O</span><span class="gateway-char">U</span><span class="gateway-char">R</span></span>
+          <br class="gateway-title-break" />
+          <span class="gateway-word-wrap gateway-word-accent"><span class="gateway-char">P</span><span class="gateway-char">R</span><span class="gateway-char">O</span><span class="gateway-char">F</span><span class="gateway-char">E</span><span class="gateway-char">S</span><span class="gateway-char">S</span><span class="gateway-char">I</span><span class="gateway-char">O</span><span class="gateway-char">N</span></span>
         </h1>
         <p class="gateway-subtitle">
           From master plumbers and 3D animators to autonomous AI developers. Hover to flip and inspect signature capabilities, then click to launch the dedicated 3D crystal matrix.
@@ -103,6 +104,13 @@
     <!-- 0. MAIN HUB VIEW (3D CRYSTAL & MENISCUS) -->
     <main id="main-hub" class="view-panel" style="display:none;">
       
+      <!-- Back to Gateway Button (top-left) -->
+      <button id="btn-hub-back-to-gateway" class="hub-back-btn" title="Back to All Professions">
+        <span class="hub-back-arrow"><i data-lucide="arrow-left"></i></span>
+        <span class="hub-back-label">ALL PROFESSIONS</span>
+        <span class="hub-back-glow"></span>
+      </button>
+
       <header class="hub-hero">
         <div class="neo-glass-tag">
           <span class="pulse-bead"></span>
@@ -873,6 +881,46 @@
           <div class="aetherbot-bubble">
             <div class="msg-text">Greetings! I am **AetherBot**, your AI Sentinel for Creator Forge. Ask me about the 3D crystal core, the universal profession matrix, or navigating the platform!</div>
             <span class="msg-time">Online</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retro Pixel Talking Character (shown when AI is generating) -->
+      <div id="aetherbot-pixel-speaker" class="aetherbot-pixel-speaker" style="display:none;">
+        <div class="pixel-speaker-wrap">
+          <div class="pixel-char-body">
+            <!-- SVG pixel character that animates when talking -->
+            <svg class="pixel-char-svg" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+              <!-- Head -->
+              <rect x="8" y="2" width="16" height="14" fill="#a3e635"/>
+              <!-- Eyes -->
+              <rect x="11" y="6" width="3" height="3" fill="#000" id="pixel-eye-l"/>
+              <rect x="18" y="6" width="3" height="3" fill="#000" id="pixel-eye-r"/>
+              <!-- Mouth - toggles open/closed via animation -->
+              <rect x="11" y="12" width="10" height="2" fill="#000" class="pixel-mouth-closed"/>
+              <rect x="11" y="12" width="10" height="3" fill="#000" class="pixel-mouth-open" style="display:none"/>
+              <rect x="13" y="13" width="6" height="2" fill="#1a1a1a" class="pixel-mouth-open" style="display:none"/>
+              <!-- Body -->
+              <rect x="10" y="16" width="12" height="10" fill="#06b6d4"/>
+              <!-- Arms -->
+              <rect x="4" y="17" width="6" height="4" fill="#06b6d4"/>
+              <rect x="22" y="17" width="6" height="4" fill="#06b6d4"/>
+              <!-- Legs -->
+              <rect x="10" y="26" width="5" height="4" fill="#1e1e2e"/>
+              <rect x="17" y="26" width="5" height="4" fill="#1e1e2e"/>
+            </svg>
+          </div>
+          <div class="pixel-speaker-text">
+            <span id="pixel-speaker-status">AetherBot is thinking</span>
+            <span class="pixel-speaker-ellipsis"><span>.</span><span>.</span><span>.</span></span>
+          </div>
+          <!-- Mini audio bars -->
+          <div class="pixel-audio-bars">
+            <span class="pbar"></span>
+            <span class="pbar"></span>
+            <span class="pbar"></span>
+            <span class="pbar"></span>
+            <span class="pbar"></span>
           </div>
         </div>
       </div>
