@@ -2719,37 +2719,45 @@ function initAudioEngine() {
   window.playSfx = playSfx;
 
   /* ─────────────────────────────────────────────────────────
-     2. PROCEDURAL GENERATIVE CYBER AMBIENT BGM
+     2. CUSTOM AUDIO TRACK BGM (bgm.wav) WITH PROCEDURAL FALLBACK
      ───────────────────────────────────────────────────────── */
+  let bgmAudioEl = null;
+
+  function initBgmAudioElement() {
+    if (!bgmAudioEl) {
+      bgmAudioEl = new Audio('bgm.wav');
+      bgmAudioEl.loop = true;
+      bgmAudioEl.volume = 0.35;
+      bgmAudioEl.preload = 'auto';
+
+      bgmAudioEl.addEventListener('ended', () => {
+        if (isBgmPlaying) bgmAudioEl.play().catch(() => {});
+      });
+
+      bgmAudioEl.addEventListener('error', (err) => {
+        console.warn('[BGM Engine] bgm.wav load issue, falling back to procedural synthesizer:', err);
+        if (isBgmPlaying) startProceduralSynth();
+      });
+    }
+    return bgmAudioEl;
+  }
+
   const PENTATONIC_FREQS = [
-    155.56, // Eb3
-    174.61, // F3
-    196.00, // G3
-    233.08, // Bb3
-    261.63, // C4
-    311.13, // Eb4
-    349.23, // F4
-    392.00, // G4
-    466.16, // Bb4
-    523.25  // C5
+    155.56, 174.61, 196.00, 233.08, 261.63,
+    311.13, 349.23, 392.00, 466.16, 523.25
   ];
 
-  function startBgm() {
-    if (isBgmPlaying) return;
+  function startProceduralSynth() {
     const ctx = getAudioContext();
     if (!ctx) return;
 
-    isBgmPlaying = true;
-
-    // Master BGM Gain with smooth fade-in
     bgmMasterGain = ctx.createGain();
     const now = ctx.currentTime;
     bgmMasterGain.gain.setValueAtTime(0.0001, now);
     bgmMasterGain.gain.linearRampToValueAtTime(0.14, now + 1.8);
     bgmMasterGain.connect(ctx.destination);
 
-    // Warm Ambient Low-Frequency Drone Layers
-    const droneFreqs = [77.78, 116.54]; // Eb2 & Bb2
+    const droneFreqs = [77.78, 116.54];
     droneNodes = [];
 
     droneFreqs.forEach((freq, idx) => {
@@ -2774,7 +2782,6 @@ function initAudioEngine() {
       droneNodes.push({ osc, filter, droneGain });
     });
 
-    // Cosmic Pentatonic Arpeggio / Bell Generator
     bgmInterval = setInterval(() => {
       if (!isBgmPlaying || !audioCtx) return;
       try {
@@ -2790,7 +2797,6 @@ function initAudioEngine() {
         bellFilter.type = 'lowpass';
         bellFilter.frequency.setValueAtTime(1400, cTime);
 
-        // Soft gentle envelope
         bellGain.gain.setValueAtTime(0.0001, cTime);
         bellGain.gain.linearRampToValueAtTime(0.05, cTime + 0.06);
         bellGain.gain.exponentialRampToValueAtTime(0.0001, cTime + 1.4);
@@ -2803,6 +2809,34 @@ function initAudioEngine() {
         bellOsc.stop(cTime + 1.5);
       } catch (err) {}
     }, 1100);
+  }
+
+  function startBgm() {
+    if (isBgmPlaying) return;
+    isBgmPlaying = true;
+
+    const audioEl = initBgmAudioElement();
+    const playPromise = audioEl.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        // Fade in smoothly
+        audioEl.volume = 0;
+        let v = 0;
+        const fadeIn = setInterval(() => {
+          v += 0.05;
+          if (v >= 0.4) {
+            audioEl.volume = 0.4;
+            clearInterval(fadeIn);
+          } else {
+            audioEl.volume = v;
+          }
+        }, 80);
+      }).catch((err) => {
+        console.warn('[BGM Engine] Audio playback blocked, attempting procedural synth:', err);
+        startProceduralSynth();
+      });
+    }
 
     updateBgmUi();
   }
@@ -2811,6 +2845,22 @@ function initAudioEngine() {
     if (!isBgmPlaying) return;
     isBgmPlaying = false;
 
+    if (bgmAudioEl) {
+      // Fade out smoothly
+      let v = bgmAudioEl.volume;
+      const fadeOut = setInterval(() => {
+        v -= 0.05;
+        if (v <= 0.01) {
+          bgmAudioEl.pause();
+          bgmAudioEl.currentTime = 0;
+          bgmAudioEl.volume = 0.4;
+          clearInterval(fadeOut);
+        } else {
+          bgmAudioEl.volume = v;
+        }
+      }, 50);
+    }
+
     if (bgmInterval) {
       clearInterval(bgmInterval);
       bgmInterval = null;
@@ -2818,7 +2868,7 @@ function initAudioEngine() {
 
     if (bgmMasterGain && audioCtx) {
       const now = audioCtx.currentTime;
-      bgmMasterGain.gain.linearRampToValueAtTime(0.0001, now + 0.7);
+      bgmMasterGain.gain.linearRampToValueAtTime(0.0001, now + 0.5);
       setTimeout(() => {
         droneNodes.forEach(node => {
           try {
@@ -2831,7 +2881,7 @@ function initAudioEngine() {
           bgmMasterGain.disconnect();
         } catch (e) {}
         bgmMasterGain = null;
-      }, 750);
+      }, 550);
     }
 
     updateBgmUi();
@@ -2842,10 +2892,10 @@ function initAudioEngine() {
     if (!btn) return;
     if (isBgmPlaying) {
       btn.classList.add('playing');
-      btn.title = 'Pause Cyber Ambient Soundtrack';
+      btn.title = 'Pause Background Music';
     } else {
       btn.classList.remove('playing');
-      btn.title = 'Play Cyber Ambient Soundtrack';
+      btn.title = 'Play Background Music';
     }
   }
 
