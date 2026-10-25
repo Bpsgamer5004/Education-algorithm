@@ -307,6 +307,114 @@ body[data-mode="recruiter"] .mode-pulse {
   box-shadow: 0 0 10px #10b981;
 }
 
+/* =========================================================
+   AUDIO CONTROLS: CYBER BGM & SFX ENGINE
+   ========================================================= */
+.audio-control-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(18, 16, 26, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  padding: 0.35rem 0.55rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+}
+
+.audio-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #94a3b8;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.audio-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.audio-btn.active {
+  background: rgba(163, 230, 53, 0.15);
+  color: #a3e635;
+  border-color: rgba(163, 230, 53, 0.4);
+  box-shadow: 0 0 12px rgba(163, 230, 53, 0.3);
+}
+
+.audio-btn.playing {
+  background: rgba(6, 182, 212, 0.18);
+  color: #06b6d4;
+  border-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+}
+
+.audio-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+/* Equalizer BGM Visualizer Bars */
+.bgm-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  width: 14px;
+}
+
+.bgm-bars span {
+  display: block;
+  width: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  height: 3px;
+  transition: height 0.2s ease;
+}
+
+.audio-btn.playing .bgm-bars span {
+  animation: bgmBarPulse 0.9s ease-in-out infinite alternate;
+}
+
+.audio-btn.playing .bgm-bars span:nth-child(1) {
+  animation-delay: 0s;
+  animation-duration: 0.65s;
+}
+.audio-btn.playing .bgm-bars span:nth-child(2) {
+  animation-delay: 0.22s;
+  animation-duration: 0.85s;
+}
+.audio-btn.playing .bgm-bars span:nth-child(3) {
+  animation-delay: 0.45s;
+  animation-duration: 0.72s;
+}
+.audio-btn.playing .bgm-bars span:nth-child(4) {
+  animation-delay: 0.15s;
+  animation-duration: 0.95s;
+}
+
+@keyframes bgmBarPulse {
+  0% {
+    height: 3px;
+  }
+  50% {
+    height: 12px;
+  }
+  100% {
+    height: 4px;
+  }
+}
+
+
 /* Toast */
 .toast-notify {
   position: fixed;

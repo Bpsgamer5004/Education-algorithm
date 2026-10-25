@@ -55,11 +55,25 @@
             <i data-lucide="briefcase"></i> Employer / Studio
           </button>
         </div>
-      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+        <!-- Audio Controls Capsule: Procedural Cyber BGM & Tactile SFX -->
+        <div class="audio-control-capsule">
+          <button id="btn-toggle-bgm" class="audio-btn" title="Toggle Cyber Ambient Soundtrack (Music)">
+            <div class="bgm-bars">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <span class="audio-btn-label">BGM</span>
+          </button>
+          <button id="btn-toggle-sfx" class="audio-btn active" title="Toggle Tactile Button Sound Effects">
+            <i data-lucide="volume-2" id="sfx-icon"></i>
+            <span class="audio-btn-label">SFX</span>
+          </button>
+        </div>
 
-      <div class="active-mode-badge" id="mode-badge-indicator">
-        <span class="mode-pulse"></span>
-        <span id="mode-text-desc">EXPLORATION MODE &bull; ALL SERVICES</span>
+        <div class="active-mode-badge" id="mode-badge-indicator">
+          <span class="mode-pulse"></span>
+          <span id="mode-text-desc">EXPLORATION MODE &bull; ALL SERVICES</span>
+        </div>
       </div>
     </header>
 

@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGatewayMatrix();
   initAnchorRouting();
   initAetherBotAssistant();
+  initAudioEngine();
 
   // Hub back-to-gateway button
   const hubBackBtn = document.getElementById('btn-hub-back-to-gateway');
@@ -2532,4 +2533,438 @@ Persona:
     }
   }
 }
+
+/* =========================================================
+   AUDIO ENGINE: PROCEDURAL WEB AUDIO API (BGM + SOUND FX)
+   ========================================================= */
+function initAudioEngine() {
+  const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtxClass) {
+    console.warn('[AudioEngine] Web Audio API not supported in this browser.');
+    return;
+  }
+
+  let audioCtx = null;
+  let sfxEnabled = localStorage.getItem('cf_sfx_enabled') !== 'false';
+  let isBgmPlaying = false;
+  let bgmInterval = null;
+  let bgmMasterGain = null;
+  let droneNodes = [];
+  let lastHoverSoundTime = 0;
+
+  function getAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new AudioCtxClass();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+    return audioCtx;
+  }
+
+  // Auto-resume audio context on first user gesture anywhere
+  const unlockAudio = () => {
+    getAudioContext();
+    document.removeEventListener('pointerdown', unlockAudio);
+    document.removeEventListener('keydown', unlockAudio);
+  };
+  document.addEventListener('pointerdown', unlockAudio, { passive: true });
+  document.addEventListener('keydown', unlockAudio, { passive: true });
+
+  /* ─────────────────────────────────────────────────────────
+     1. PROCEDURAL SOUND EFFECTS (SFX)
+     ───────────────────────────────────────────────────────── */
+  function playSfx(type = 'click') {
+    if (!sfxEnabled) return;
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      if (type === 'hover') {
+        // Rate-limit hover sounds to prevent audio clutter
+        const realNow = Date.now();
+        if (realNow - lastHoverSoundTime < 65) return;
+        lastHoverSoundTime = realNow;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1200, now);
+
+        gain.gain.setValueAtTime(0.025, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.025);
+        return;
+      }
+
+      if (type === 'click') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(850, now);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.038);
+
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.042);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.045);
+        return;
+      }
+
+      if (type === 'warp') {
+        // High-tech frequency sweep for launching crystal or profession matrix
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const filter = ctx.createBiquadFilter();
+        const gain = ctx.createGain();
+
+        osc1.type = 'sawtooth';
+        osc2.type = 'sine';
+        osc1.frequency.setValueAtTime(180, now);
+        osc1.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+        osc2.frequency.setValueAtTime(360, now);
+        osc2.frequency.exponentialRampToValueAtTime(1320, now + 0.18);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(450, now);
+        filter.frequency.exponentialRampToValueAtTime(1400, now + 0.18);
+        filter.Q.setValueAtTime(4, now);
+
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+
+        osc1.connect(filter);
+        osc2.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.23);
+        osc2.stop(now + 0.23);
+        return;
+      }
+
+      if (type === 'confirm' || type === 'toggle') {
+        // Ascending harmonic chime
+        [523.25, 783.99].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const noteTime = now + (i * 0.045);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteTime);
+
+          gain.gain.setValueAtTime(0.09, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 0.14);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(noteTime);
+          osc.stop(noteTime + 0.15);
+        });
+        return;
+      }
+
+      if (type === 'chip') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1350, now);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.028);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.03);
+        return;
+      }
+
+      if (type === 'heart') {
+        // Heart favorite chime
+        [659.25, 987.77].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const noteTime = now + (i * 0.06);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteTime);
+
+          gain.gain.setValueAtTime(0.1, noteTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 0.24);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(noteTime);
+          osc.stop(noteTime + 0.25);
+        });
+        return;
+      }
+    } catch (e) {
+      // AudioContext could be blocked by browser policy
+    }
+  }
+
+  // Expose globally
+  window.playSfx = playSfx;
+
+  /* ─────────────────────────────────────────────────────────
+     2. PROCEDURAL GENERATIVE CYBER AMBIENT BGM
+     ───────────────────────────────────────────────────────── */
+  const PENTATONIC_FREQS = [
+    155.56, // Eb3
+    174.61, // F3
+    196.00, // G3
+    233.08, // Bb3
+    261.63, // C4
+    311.13, // Eb4
+    349.23, // F4
+    392.00, // G4
+    466.16, // Bb4
+    523.25  // C5
+  ];
+
+  function startBgm() {
+    if (isBgmPlaying) return;
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    isBgmPlaying = true;
+
+    // Master BGM Gain with smooth fade-in
+    bgmMasterGain = ctx.createGain();
+    const now = ctx.currentTime;
+    bgmMasterGain.gain.setValueAtTime(0.0001, now);
+    bgmMasterGain.gain.linearRampToValueAtTime(0.14, now + 1.8);
+    bgmMasterGain.connect(ctx.destination);
+
+    // Warm Ambient Low-Frequency Drone Layers
+    const droneFreqs = [77.78, 116.54]; // Eb2 & Bb2
+    droneNodes = [];
+
+    droneFreqs.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const filter = ctx.createBiquadFilter();
+      const droneGain = ctx.createGain();
+
+      osc.type = idx === 0 ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(freq, now);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(320, now);
+      filter.Q.setValueAtTime(1.5, now);
+
+      droneGain.gain.setValueAtTime(idx === 0 ? 0.35 : 0.18, now);
+
+      osc.connect(filter);
+      filter.connect(droneGain);
+      droneGain.connect(bgmMasterGain);
+
+      osc.start(now);
+      droneNodes.push({ osc, filter, droneGain });
+    });
+
+    // Cosmic Pentatonic Arpeggio / Bell Generator
+    bgmInterval = setInterval(() => {
+      if (!isBgmPlaying || !audioCtx) return;
+      try {
+        const cTime = audioCtx.currentTime;
+        const randomPitch = PENTATONIC_FREQS[Math.floor(Math.random() * PENTATONIC_FREQS.length)];
+        const bellOsc = audioCtx.createOscillator();
+        const bellFilter = audioCtx.createBiquadFilter();
+        const bellGain = audioCtx.createGain();
+
+        bellOsc.type = 'sine';
+        bellOsc.frequency.setValueAtTime(randomPitch, cTime);
+
+        bellFilter.type = 'lowpass';
+        bellFilter.frequency.setValueAtTime(1400, cTime);
+
+        // Soft gentle envelope
+        bellGain.gain.setValueAtTime(0.0001, cTime);
+        bellGain.gain.linearRampToValueAtTime(0.05, cTime + 0.06);
+        bellGain.gain.exponentialRampToValueAtTime(0.0001, cTime + 1.4);
+
+        bellOsc.connect(bellFilter);
+        bellFilter.connect(bellGain);
+        bellGain.connect(bgmMasterGain);
+
+        bellOsc.start(cTime);
+        bellOsc.stop(cTime + 1.5);
+      } catch (err) {}
+    }, 1100);
+
+    updateBgmUi();
+  }
+
+  function stopBgm() {
+    if (!isBgmPlaying) return;
+    isBgmPlaying = false;
+
+    if (bgmInterval) {
+      clearInterval(bgmInterval);
+      bgmInterval = null;
+    }
+
+    if (bgmMasterGain && audioCtx) {
+      const now = audioCtx.currentTime;
+      bgmMasterGain.gain.linearRampToValueAtTime(0.0001, now + 0.7);
+      setTimeout(() => {
+        droneNodes.forEach(node => {
+          try {
+            node.osc.stop();
+            node.osc.disconnect();
+          } catch (e) {}
+        });
+        droneNodes = [];
+        try {
+          bgmMasterGain.disconnect();
+        } catch (e) {}
+        bgmMasterGain = null;
+      }, 750);
+    }
+
+    updateBgmUi();
+  }
+
+  function updateBgmUi() {
+    const btn = document.getElementById('btn-toggle-bgm');
+    if (!btn) return;
+    if (isBgmPlaying) {
+      btn.classList.add('playing');
+      btn.title = 'Pause Cyber Ambient Soundtrack';
+    } else {
+      btn.classList.remove('playing');
+      btn.title = 'Play Cyber Ambient Soundtrack';
+    }
+  }
+
+  function updateSfxUi() {
+    const btn = document.getElementById('btn-toggle-sfx');
+    const icon = document.getElementById('sfx-icon');
+    if (!btn) return;
+    if (sfxEnabled) {
+      btn.classList.add('active');
+      btn.title = 'Mute Button Sound Effects';
+      if (icon) icon.setAttribute('data-lucide', 'volume-2');
+    } else {
+      btn.classList.remove('active');
+      btn.title = 'Enable Button Sound Effects';
+      if (icon) icon.setAttribute('data-lucide', 'volume-x');
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  /* ─────────────────────────────────────────────────────────
+     3. EVENT LISTENERS & GLOBAL BUTTON SOUNDS
+     ───────────────────────────────────────────────────────── */
+  const btnBgm = document.getElementById('btn-toggle-bgm');
+  if (btnBgm) {
+    btnBgm.addEventListener('click', () => {
+      playSfx('click');
+      if (isBgmPlaying) {
+        stopBgm();
+        showToast('Soundtrack Paused');
+      } else {
+        startBgm();
+        showToast('Cyber Ambient Soundtrack Activated');
+      }
+    });
+  }
+
+  const btnSfx = document.getElementById('btn-toggle-sfx');
+  if (btnSfx) {
+    btnSfx.addEventListener('click', () => {
+      sfxEnabled = !sfxEnabled;
+      localStorage.setItem('cf_sfx_enabled', sfxEnabled);
+      updateSfxUi();
+      if (sfxEnabled) {
+        playSfx('confirm');
+        showToast('Button Sound Effects: ON');
+      } else {
+        showToast('Button Sound Effects: MUTED');
+      }
+    });
+  }
+
+  // Global delegation for all interactive elements (tactile sound experience)
+  document.addEventListener('click', (e) => {
+    // Exclude the sound toggle buttons themselves to prevent double clicks
+    if (e.target.closest('#btn-toggle-bgm') || e.target.closest('#btn-toggle-sfx')) return;
+
+    // Warp sound for page / matrix transitions
+    if (
+      e.target.closest('.profession-flip-card') ||
+      e.target.closest('.btn-launch-hub') ||
+      e.target.closest('#btn-back-to-gateway') ||
+      e.target.closest('#btn-hub-back-to-gateway') ||
+      e.target.closest('.hub-back-btn') ||
+      e.target.closest('.btn-portal')
+    ) {
+      playSfx('warp');
+      return;
+    }
+
+    // Confirmation sound for mode toggles, favorites, contacts
+    if (
+      e.target.closest('.mode-toggle-btn') ||
+      e.target.closest('.btn-add-contact') ||
+      e.target.closest('.btn-deal-accept')
+    ) {
+      playSfx('confirm');
+      return;
+    }
+
+    // Heart sound
+    if (e.target.closest('.creator-heart-btn')) {
+      playSfx('heart');
+      return;
+    }
+
+    // Chip sound for filter pills and tags
+    if (
+      e.target.closest('.filter-btn') ||
+      e.target.closest('.quick-chip-btn') ||
+      e.target.closest('.gateway-cat-pill') ||
+      e.target.closest('.tab-btn')
+    ) {
+      playSfx('chip');
+      return;
+    }
+
+    // Default click for any button, link, or interactive element
+    if (
+      e.target.closest('button') ||
+      e.target.closest('.glass-icon-box') ||
+      e.target.closest('.interactive-chip') ||
+      e.target.closest('.aetherbot-send-btn')
+    ) {
+      playSfx('click');
+    }
+  }, { passive: true });
+
+  // Subtle hover sound for buttons and cards
+  document.addEventListener('pointerover', (e) => {
+    const target = e.target.closest(
+      'button, .profession-flip-card, .creator-card, .filter-btn, .gateway-cat-pill, .mode-toggle-btn, .audio-btn'
+    );
+    if (target) {
+      playSfx('hover');
+    }
+  }, { passive: true });
+
+  updateBgmUi();
+  updateSfxUi();
+}
+
 
