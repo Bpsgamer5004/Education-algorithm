@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnchorRouting();
   initAetherBotAssistant();
   initAudioEngine();
+  initHeroIntroSplash();
 
   // Hub back-to-gateway button
   const hubBackBtn = document.getElementById('btn-hub-back-to-gateway');
@@ -3267,3 +3268,62 @@ function initAudioEngine() {
 }
 
 
+
+
+/* =========================================================
+   CINEMATIC HERO INTRO SPLASH (INTERRUPT-BASED AUTO REVEAL)
+   ========================================================= */
+function initHeroIntroSplash() {
+  const splash = document.getElementById('hero-intro-splash');
+  if (!splash) return;
+
+  let isDismissed = false;
+
+  function dismissSplash() {
+    if (isDismissed) return;
+    isDismissed = true;
+
+    // Clean up event listeners
+    window.removeEventListener('keydown', handleGlobalInterrupt);
+    window.removeEventListener('wheel', handleGlobalInterrupt);
+    window.removeEventListener('touchstart', handleGlobalInterrupt);
+    splash.removeEventListener('pointerdown', handleGlobalInterrupt);
+
+    // Audio feedback if sound effects are active
+    if (window.playSfx) {
+      window.playSfx('warp');
+    }
+
+    // Trigger smooth bottom-up glide and fade out
+    splash.classList.add('dismissed');
+
+    // Remove from layout after fade transition ends to keep DOM light
+    setTimeout(() => {
+      try {
+        splash.remove();
+      } catch (e) {
+        splash.style.display = 'none';
+      }
+    }, 1400);
+  }
+
+  function handleGlobalInterrupt(e) {
+    dismissSplash();
+  }
+
+  // 1. Every user interaction skips the intro immediately:
+  // Mouse click / tap anywhere
+  splash.addEventListener('pointerdown', handleGlobalInterrupt, { passive: true });
+  // Any keyboard key (Space, Enter, Esc, Arrows, etc.)
+  window.addEventListener('keydown', handleGlobalInterrupt, { passive: true });
+  // Mouse scroll wheel
+  window.addEventListener('wheel', handleGlobalInterrupt, { passive: true });
+  // Mobile swipe/touch
+  window.addEventListener('touchstart', handleGlobalInterrupt, { passive: true });
+
+  // 2. Automatic cinematic timer: smoothly reveals the site after 3.2s
+  // so visitors can soak in the artwork without touching anything
+  setTimeout(() => {
+    dismissSplash();
+  }, 3200);
+}

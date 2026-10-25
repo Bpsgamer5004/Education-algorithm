@@ -2754,3 +2754,164 @@ body[data-mode="recruiter"] .mode-pulse {
 .aetherbot-send-btn:active { transform: translate(2px, 2px); box-shadow: none; }
 .aetherbot-send-btn:disabled { background: #52525b; cursor: not-allowed; transform: none; box-shadow: none; }
 
+
+
+/* =========================================================
+   CINEMATIC HERO LOGO INTRO SPLASH (SPOTIFY-STYLE BACKLIGHT)
+   ========================================================= */
+.hero-intro-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  visibility: visible;
+  cursor: pointer;
+  transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* Bottom-up fade out + subtle majestic zoom reveal */
+.hero-intro-splash.dismissed {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50px) scale(1.05);
+  pointer-events: none;
+}
+
+/* 1. Deep Spotify-style ambient wall reflection */
+.hero-splash-spotify-backdrop {
+  position: absolute;
+  inset: -20%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(110px) saturate(2.4) brightness(0.65);
+  opacity: 0.65;
+  transform: scale(1.25);
+  animation: spotifyAmbientBreathing 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* 2. Deep vignette overlay to keep the center glowing and edges dark */
+.hero-splash-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.75) 60%, #000000 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-splash-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  max-width: 90vw;
+  user-select: none;
+}
+
+/* Square Art Container */
+.hero-splash-emblem-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+/* 3. The signature Spotify "cheap backlight" effect:
+   A mirrored copy of the exact square artwork placed directly behind the image,
+   scaled up and heavily blurred to bleed the album's exact dominant colors */
+.hero-splash-backlight-mirror {
+  position: absolute;
+  inset: -12%;
+  background-position: center center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  filter: blur(48px) saturate(2.8) brightness(1.2);
+  opacity: 0.88;
+  transform: scale(1.08);
+  animation: spotifyGlowPulse 5s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 4px;
+}
+
+/* Pure square image artwork (NO circular borders, NO round clipping) */
+.hero-splash-logo {
+  position: relative;
+  z-index: 1;
+  width: min(360px, 68vw);
+  height: min(360px, 68vw);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9),
+              0 0 40px rgba(168, 85, 247, 0.25);
+  animation: heroSquareFloat 5s ease-in-out infinite alternate;
+}
+
+.hero-splash-tagline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.hero-splash-brand {
+  font-family: var(--font-display, 'Cabinet Grotesk', sans-serif);
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.6),
+               0 0 60px rgba(168, 85, 247, 0.7);
+}
+
+.hero-splash-sub {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  letter-spacing: 0.24em;
+  color: #c4b5fd;
+  text-shadow: 0 0 15px rgba(196, 181, 253, 0.4);
+}
+
+.hero-splash-hint {
+  margin-top: 1.2rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: #71717a;
+  animation: hintBlink 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes spotifyAmbientBreathing {
+  0% { transform: scale(1.15) rotate(0deg); opacity: 0.55; }
+  100% { transform: scale(1.35) rotate(1.5deg); opacity: 0.78; }
+}
+
+@keyframes spotifyGlowPulse {
+  0% { filter: blur(42px) saturate(2.4) brightness(1.1); transform: scale(1.04); }
+  100% { filter: blur(58px) saturate(3.2) brightness(1.35); transform: scale(1.14); }
+}
+
+@keyframes heroSquareFloat {
+  0% { transform: translateY(0px) scale(0.99); }
+  100% { transform: translateY(-8px) scale(1.01); }
+}
+
+@keyframes hintBlink {
+  0% { opacity: 0.35; }
+  100% { opacity: 0.85; }
+}
