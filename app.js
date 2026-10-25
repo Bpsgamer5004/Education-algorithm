@@ -2411,28 +2411,45 @@ Persona:
       // Update status text once the request is actually flying
       if (speakerStatus) speakerStatus.textContent = 'AetherBot is speaking…';
 
-      const response = await fetch(NVIDIA_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${NVIDIA_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: NVIDIA_MODEL,
-          messages: conversationHistory,
-          max_tokens: 650,
-          temperature: 0.65,
-          top_p: 0.9
-        })
-      });
+      const requestPayload = {
+        model: NVIDIA_MODEL,
+        messages: conversationHistory,
+        max_tokens: 650,
+        temperature: 0.65,
+        top_p: 0.9
+      };
+
+      let response;
+      try {
+        // Try Vercel Serverless Function proxy first (bypasses browser CORS restrictions)
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestPayload)
+        });
+
+        if (!response.ok && response.status === 404) {
+          throw new Error('Proxy not found');
+        }
+      } catch (proxyErr) {
+        // Fallback directly to NVIDIA NIM API (for local preview / non-serverless)
+        response = await fetch(NVIDIA_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${NVIDIA_API_KEY}`
+          },
+          body: JSON.stringify(requestPayload)
+        });
+      }
 
       if (!response.ok) {
         const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson?.error?.message || `API error (${response.status})`);
+        throw new Error(errJson?.error?.message || errJson?.error || `API error (${response.status})`);
       }
 
       const resData = await response.json();
-      const botResponse = resData.choices?.[0]?.message?.content || "I couldn't generate a response. Please try again.";
+      const botResponse = resData.choices?.[0]?.message?.content || resData.choices?.[0]?.message?.reasoning_content || "I couldn't generate a response. Please try again.";
 
       typingDiv.remove();
       appendMessageUI('assistant', botResponse);
