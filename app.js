@@ -2468,7 +2468,6 @@ function initAetherBotAssistant() {
 
   if (!widget || !triggerBtn || !chatPanel) return;
 
-  const NVIDIA_API_KEY = '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';
   const NVIDIA_ENDPOINT = 'https://integrate.api.nvidia.com/v1/chat/completions';
   const NVIDIA_MODEL = 'nvidia/nemotron-3-ultra-550b-a55b';
 
@@ -2485,7 +2484,7 @@ function initAetherBotAssistant() {
     try {
       supabaseClient = window.supabase.createClient(
         storedSupaUrl,
-        'sb_publishable_-2pHlArenaX1ewBalLKYsA_URFMlzHt'
+        localStorage.getItem('cf_supabase_anon_key') || ''
       );
     } catch (e) {
       console.warn('[AetherBot Supabase] Init failed silently:', e);
@@ -2747,7 +2746,7 @@ Persona:
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${NVIDIA_API_KEY}`
+            'Authorization': `Bearer ${localStorage.getItem('cf_nvidia_api_key') || ''}`
           },
           body: JSON.stringify(requestPayload)
         });
